@@ -30,13 +30,6 @@
             height: 28px;
             border-radius: 4px;
         }
-        #map {
-            width: 100%;
-            height: 400px;
-            border-radius: var(--radius);
-            border: 0.5px solid var(--border);
-            box-shadow: var(--shadow-sm);
-        }
     </style>
 </head>
 
@@ -231,6 +224,9 @@
                             <div class="badge-grid">
                                 <img src="https://img.shields.io/badge/Webflow-146EF5?style=for-the-badge&logo=webflow&logoColor=white" alt="Webflow">
                                 <img src="https://img.shields.io/badge/n8n-EA4B71?style=for-the-badge&logo=n8n&logoColor=white" alt="n8n">
+                                <img src="https://img.shields.io/badge/WordPress-21759B?style=for-the-badge&logo=wordpress&logoColor=white" alt="WordPress">
+                                <img src="https://img.shields.io/badge/Wix-0C6EFC?style=for-the-badge&logo=wix&logoColor=white" alt="Wix">
+                                <img src="https://img.shields.io/badge/Framer-0055FF?style=for-the-badge&logo=framer&logoColor=white" alt="Framer">
                                 <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
                             </div>
                         </div>
@@ -466,7 +462,39 @@
         <div class="container">
             <div class="section-eyebrow">04 / Danao City Cebu</div>
             <h2 class="section-title" data-split-words>Where I'm Based</h2>
-            <div id="map" style="margin-top: 32px;"></div>
+            <div class="map-console">
+                <div class="map-console-bar">
+                    <span class="mc-dot"></span>
+                    <span class="mc-id">FEED&nbsp;01 &middot; DANAO CITY, CEBU</span>
+                    <span class="mc-status" id="mc-clock">--:--:--</span>
+                </div>
+                <div class="map-frame">
+                    <div id="map"></div>
+                    <div class="map-hud" aria-hidden="true">
+                        <span class="hud-corner tl"></span>
+                        <span class="hud-corner tr"></span>
+                        <span class="hud-corner bl"></span>
+                        <span class="hud-corner br"></span>
+                        <span class="hud-scan"></span>
+                        <span class="hud-reticle">
+                            <i class="r-ring r1"></i>
+                            <i class="r-ring r2"></i>
+                            <i class="r-ring r3"></i>
+                            <i class="r-ping"></i>
+                            <i class="r-cross"></i>
+                            <i class="r-dot"></i>
+                        </span>
+                        <span class="hud-tag t1">SUBJECT&nbsp;/&nbsp;F. TRIPOLE</span>
+                        <span class="hud-tag t2">LAT 10.5199&deg;N &nbsp; LNG 124.0272&deg;E</span>
+                        <span class="hud-tag t3">SIG&nbsp;<b>LOCKED</b></span>
+                        <span class="hud-tag t4">MODE&nbsp;<b>HYBRID-SAT</b> &middot; ZM&nbsp;<b id="mc-zoom">16</b></span>
+                    </div>
+                </div>
+                <div class="map-console-bar foot">
+                    <span class="mc-id">GRID REF &middot; 10.5199 / 124.0272</span>
+                    <span class="mc-status">TRACKING &middot; ACTIVE</span>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -533,426 +561,50 @@
 
     <script>
         function initMap() {
-            const danaoCity = { lat: 10.5199, lng: 124.0272 };
+            const origin = { lat: 10.5199, lng: 124.0272 };
+
             const map = new google.maps.Map(document.getElementById("map"), {
-                center: danaoCity,
-                zoom: 14,
-                disableDefaultUI: false,
-                styles: [
-                    { "featureType": "all", "elementType": "all", "stylers": [{ "saturation": -80 }, { "lightness": 10 }] },
-                    { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#1a1a1a" }] }
-                ]
+                center: origin,
+                zoom: 16,
+                mapTypeId: google.maps.MapTypeId.HYBRID,
+                tilt: 0,
+                backgroundColor: '#04070a',
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: false
             });
-            const marker = new google.maps.Marker({
-                position: danaoCity,
-                map: map,
-                title: "Franklin Tripole | Danao City",
-                animation: google.maps.Animation.DROP
-            });
-            const infoWindow = new google.maps.InfoWindow({
-                content: '<div style="color:#000; padding:5px;"><b>Franklin Tripole</b><br>Danao City, Cebu</div>'
-            });
-            marker.addListener("click", () => { infoWindow.open(map, marker); });
+
+            // The tactical reticle is drawn in the HUD above the map so the
+            // map's colour filter does not wash it out. This overlay keeps it
+            // pinned to the coordinates through pan and zoom.
+            const reticle = document.querySelector('.hud-reticle');
+            const pin = new google.maps.OverlayView();
+            pin.onAdd = function () { };
+            pin.onRemove = function () { };
+            pin.draw = function () {
+                const proj = this.getProjection();
+                if (!proj || !reticle) return;
+                const pt = proj.fromLatLngToContainerPixel(new google.maps.LatLng(origin.lat, origin.lng));
+                if (!pt) return;
+                reticle.style.left = pt.x + 'px';
+                reticle.style.top = pt.y + 'px';
+            };
+            pin.setMap(map);
+
+            const zoomOut = document.getElementById('mc-zoom');
+            if (zoomOut) {
+                map.addListener('zoom_changed', () => { zoomOut.textContent = map.getZoom(); });
+            }
+
+            const clock = document.getElementById('mc-clock');
+            const pad = n => String(n).padStart(2, '0');
+            function tick() {
+                const d = new Date();
+                clock.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+            }
+            tick();
+            setInterval(tick, 1000);
         }
-
-        (function () {
-            const canvas = document.getElementById('footer-canvas');
-            const ctx = canvas.getContext('2d');
-            const footer = canvas.closest('footer');
-            if (!footer) return;
-            let W, H, stars = [], raf;
-            let linkDistance = 110;
-            let starCount = 160;
-
-            function resize() {
-                const rect = footer.getBoundingClientRect();
-                const dpr = window.devicePixelRatio || 1;
-                canvas.width = rect.width * dpr;
-                canvas.height = rect.height * dpr;
-                ctx.scale(dpr, dpr);
-                W = rect.width;
-                H = rect.height;
-                const mobile = window.matchMedia('(max-width: 640px)').matches;
-                starCount = mobile ? 70 : 160;
-                linkDistance = mobile ? 70 : 110;
-                stars = [];
-                for (let i = 0; i < starCount; i++) stars.push(mkStar());
-            }
-
-            function mkStar() {
-                const mobile = window.matchMedia('(max-width: 640px)').matches;
-                return {
-                    x: Math.random() * W,
-                    y: Math.random() * H,
-                    r: Math.random() * (mobile ? 1.1 : 1.6) + (mobile ? 0.2 : 0.3),
-                    vx: (Math.random() - 0.5) * (mobile ? 0.16 : 0.24),
-                    vy: (Math.random() - 0.5) * (mobile ? 0.1 : 0.14),
-                    a: Math.random() * 0.85 + 0.15
-                };
-            }
-
-            function draw() {
-                ctx.clearRect(0, 0, W, H);
-                stars.forEach(s => {
-                    s.x += s.vx; s.y += s.vy;
-                    if (s.x < 0) s.x = W; if (s.x > W) s.x = 0;
-                    if (s.y < 0) s.y = H; if (s.y > H) s.y = 0;
-                    ctx.beginPath();
-                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(160,196,255,${s.a * 0.6})`;
-                    ctx.fill();
-                });
-                for (let i = 0; i < stars.length; i++) {
-                    for (let j = i + 1; j < stars.length; j++) {
-                        const dx = stars[i].x - stars[j].x;
-                        const dy = stars[i].y - stars[j].y;
-                        const d = Math.sqrt(dx * dx + dy * dy);
-                        if (d < 110) {
-                            ctx.beginPath();
-                            ctx.moveTo(stars[i].x, stars[i].y);
-                            ctx.lineTo(stars[j].x, stars[j].y);
-                            ctx.strokeStyle = `rgba(100,150,230,${(1 - d / 110) * 0.16})`;
-                            ctx.lineWidth = 0.6;
-                            ctx.stroke();
-                        }
-                    }
-                }
-                raf = requestAnimationFrame(draw);
-            }
-
-            const ro = new ResizeObserver(() => { resize(); });
-            ro.observe(footer);
-            window.addEventListener('load', () => { resize(); cancelAnimationFrame(raf); draw(); });
-            resize();
-            draw();
-        })();
-
-        (function () {
-            const canvas = document.getElementById('hero-canvas');
-            const ctx = canvas.getContext('2d');
-            let W = canvas.width, H = canvas.height, stars = [], raf;
-            let linkDistance = 100;
-            let starCount = 120;
-
-            function resize() {
-                const rect = canvas.getBoundingClientRect();
-                const dpr = window.devicePixelRatio || 1;
-                canvas.width = rect.width * dpr;
-                canvas.height = rect.height * dpr;
-                ctx.scale(dpr, dpr);
-                W = rect.width;
-                H = rect.height;
-                const mobile = window.matchMedia('(max-width: 640px)').matches;
-                starCount = mobile ? 60 : 120;
-                linkDistance = mobile ? 60 : 100;
-                stars = [];
-                for (let i = 0; i < starCount; i++) stars.push(mkStar());
-            }
-
-            function mkStar() {
-                const mobile = window.matchMedia('(max-width: 640px)').matches;
-                return {
-                    x: Math.random() * W,
-                    y: Math.random() * H,
-                    r: Math.random() * (mobile ? 0.8 : 1.2) + (mobile ? 0.15 : 0.2),
-                    vx: (Math.random() - 0.5) * (mobile ? 0.12 : 0.18),
-                    vy: (Math.random() - 0.5) * (mobile ? 0.08 : 0.12),
-                    a: Math.random() * 0.8 + 0.2
-                };
-            }
-
-            const mouse = { x: -9999, y: -9999 };
-            const heroEl = canvas.closest('header');
-            if (heroEl && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-                heroEl.addEventListener('pointermove', e => {
-                    const r = canvas.getBoundingClientRect();
-                    mouse.x = e.clientX - r.left;
-                    mouse.y = e.clientY - r.top;
-                }, { passive: true });
-                heroEl.addEventListener('pointerleave', () => { mouse.x = mouse.y = -9999; });
-            }
-
-            function draw() {
-                ctx.clearRect(0, 0, W, H);
-                const REACH = 140;
-                stars.forEach(s => {
-                    s.x += s.vx; s.y += s.vy;
-                    if (s.x < 0) s.x = W; if (s.x > W) s.x = 0;
-                    if (s.y < 0) s.y = H; if (s.y > H) s.y = 0;
-
-                    // push away from the cursor and brighten as it nears
-                    const mx = s.x - mouse.x, my = s.y - mouse.y;
-                    const md = Math.sqrt(mx * mx + my * my);
-                    let glow = 1, alpha = s.a * 0.7;
-                    s.px = s.x; s.py = s.y;
-                    if (md < REACH && md > 0.01) {
-                        const force = (1 - md / REACH);
-                        s.px += (mx / md) * force * 28;
-                        s.py += (my / md) * force * 28;
-                        glow = 1 + force * 1.8;
-                        alpha = Math.min(1, s.a * 0.7 + force * 0.5);
-                    }
-
-                    ctx.beginPath();
-                    ctx.arc(s.px, s.py, s.r * glow, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(41,151,255,${alpha})`;
-                    ctx.fill();
-                });
-                for (let i = 0; i < stars.length; i++) {
-                    for (let j = i + 1; j < stars.length; j++) {
-                        const dx = stars[i].px - stars[j].px;
-                        const dy = stars[i].py - stars[j].py;
-                        const d = Math.sqrt(dx * dx + dy * dy);
-                        if (d < linkDistance) {
-                            ctx.beginPath();
-                            ctx.moveTo(stars[i].px, stars[i].py);
-                            ctx.lineTo(stars[j].px, stars[j].py);
-                            ctx.strokeStyle = `rgba(0,113,227,${(1 - d / linkDistance) * 0.2})`;
-                            ctx.lineWidth = 0.5;
-                            ctx.stroke();
-                        }
-                    }
-                }
-                raf = requestAnimationFrame(draw);
-            }
-
-            const ro = new ResizeObserver(() => { resize(); });
-            ro.observe(canvas);
-            window.addEventListener('load', () => { resize(); draw(); });
-            resize();
-            draw();
-        })();
-
-        const revealObserver = new IntersectionObserver(entries => {
-            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-        }, { threshold: 0.07 });
-        document.querySelectorAll('.reveal').forEach(r => revealObserver.observe(r));
-
-        const root = document.documentElement;
-        const td = document.getElementById('theme-toggle');
-        const tm = document.getElementById('theme-toggle-mob');
-        function setTheme(dark) {
-            root.dataset.theme = dark ? 'dark' : '';
-            const icon = dark ? '☀️' : '🌙';
-            td.textContent = icon; tm.textContent = icon;
-            localStorage.setItem('ft_theme', dark ? 'dark' : 'light');
-        }
-        setTheme(localStorage.getItem('ft_theme') !== 'light');
-        [td, tm].forEach(b => b.addEventListener('click', () => setTheme(root.dataset.theme !== 'dark')));
-
-        const ham = document.getElementById('hamburger');
-        const mob = document.getElementById('mobile-menu');
-        ham.addEventListener('click', () => { ham.classList.toggle('open'); mob.classList.toggle('open'); });
-        document.querySelectorAll('.mob-link').forEach(l => l.addEventListener('click', () => { ham.classList.remove('open'); mob.classList.remove('open'); }));
-
-        const modalData = {
-            hppygtm: {
-                name: "HPPY GTM", icon: '<span class="proj-icon-text">HG</span>', tag: "Worked Project",
-                desc: "A high-performance agency site built around Go-To-Market strategy and conversion. Designed to communicate the agency's GTM methodology clearly and drive qualified leads.",
-                role: "Responsible for the full Webflow build — translating design mockups into a responsive, production-ready site. Handled layout, animations, CMS structure, and performance optimisation.",
-                video: 'gtm.mp4'
-            },
-            ethos: {
-                name: "ethos", icon: '<span class="proj-icon-text">ET</span>', tag: "Worked Project",
-                desc: "A brand identity platform focused on positioning professionals and businesses for growth. Clean, editorial design with a strong emphasis on storytelling and service clarity.",
-                role: "Developed the site in Webflow, implementing the visual identity system, responsive layouts, and interactive elements that bring the Ethos brand to life.",
-                video: 'ethos.mp4'
-            },
-            hppy: {
-                name: "HPPY Hour Agency", icon: '<span class="proj-icon-text">HA</span>', tag: "Company Hub",
-                desc: "The main agency hub for HPPY Hour — showcasing their creative services, team, and digital capabilities. Built to convert visitors into clients.",
-                role: "Core developer on the agency's own site. Handled the Webflow build, component architecture, page transitions, and ongoing maintenance as the site evolves.",
-                video: 'hppy.mp4'
-            },
-            server: {
-                name: "Self-Hosted Server", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="7" rx="2"/><rect x="2" y="14" width="20" height="7" rx="2"/><path d="M6 6.5h.01M6 17.5h.01M10 6.5h.01M10 17.5h.01"/></svg>', tag: "Infrastructure",
-                image: './assets/server.png',
-                desc: "A dedicated Linux host running my staging environments, internal tooling, and backup storage. It gives me a controlled environment to validate deployments, test failure scenarios, and rehearse recovery before any of it touches a production site.",
-                roleLabel: "Stack and configuration",
-                role: "Ubuntu Server as the base, Docker for service isolation, and Nginx handling reverse proxying and TLS termination. Remote access runs over a Cloudflare Tunnel, so no ports are exposed to the public internet. Scheduled snapshots cover backups, and the configuration is documented well enough to rebuild the host from scratch."
-            },
-            networking: {
-                name: "Network Architecture", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="6" rx="1.5"/><rect x="2" y="15" width="6" height="6" rx="1.5"/><rect x="16" y="15" width="6" height="6" rx="1.5"/><path d="M12 9v3M5 15v-3h14v3"/></svg>', tag: "Networking",
-                image: './assets/networking.png',
-                desc: "A segmented network built so that untrusted devices cannot reach the systems that matter, with local name resolution and genuine visibility into what is on the wire.",
-                roleLabel: "How it's configured",
-                role: "VLANs isolating IoT devices from workstations and servers, Pi-hole handling DNS and filtering network-wide, and static DHCP reservations for predictable addressing. Remote access runs over WireGuard. When something behaves unexpectedly, Wireshark is the first tool out."
-            },
-            vscode: {
-                name: "Development Environment", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m8 17-5-5 5-5"/><path d="m16 7 5 5-5 5"/><path d="m13.5 4-3 16"/></svg>', tag: "Workflow",
-                image: './assets/vscode.png',
-                desc: "A deliberately standardised editor setup. The objective is consistent output regardless of which project I am in, and catching problems at authoring time rather than in review.",
-                roleLabel: "Configuration",
-                role: "ESLint and Prettier enforced on save so formatting never reaches a diff, GitLens for inline blame and file history, and Live Server for rapid iteration against static builds. Custom snippets and keybindings cover the patterns I write repeatedly."
-            },
-            n8n: {
-                name: "Workflow Automation", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="4.5" cy="12" r="2.5"/><circle cx="19.5" cy="6" r="2.5"/><circle cx="19.5" cy="18" r="2.5"/><circle cx="12" cy="12" r="2.5"/><path d="M7 12h2.5M14.5 11l2.8-3.5M14.5 13l2.8 3.5"/></svg>', tag: "Automation",
-                image: './assets/n8n.png',
-                desc: "Self-hosted automation covering the recurring operational work around client sites: lead routing, uptime monitoring, and moving structured data between services on a schedule.",
-                roleLabel: "Workflows in production",
-                role: "Runs on the same infrastructure as everything else. Active flows route contact form submissions into a spreadsheet and raise a Telegram notification, run scheduled uptime checks against client sites with alerting on failure, and synchronise structured data between services at fixed intervals."
-            }
-        };
-
-        function openModal(id) {
-            const data = modalData[id];
-            if (!data) return;
-            document.getElementById('modal-name').textContent = data.name;
-            document.getElementById('modal-icon').innerHTML = data.icon;
-            document.getElementById('modal-tag').textContent = data.tag;
-            document.getElementById('modal-desc').textContent = data.desc;
-            document.getElementById('modal-role').textContent = data.role;
-            document.getElementById('modal-role-label').textContent = data.roleLabel || 'My Role';
-            document.getElementById('modal-title-bar').textContent = data.name + ' — Project Details';
-            document.getElementById('modal-right').innerHTML = data.image
-                ? '<img class="modal-media" src="' + data.image + '" alt="' + data.name + '">'
-                : '<div class="modal-mark">' + data.icon + '</div>';
-            document.getElementById('proj-modal').classList.add('open');
-            document.body.classList.add('modal-open');
-        }
-
-        function closeModal() {
-            document.getElementById('proj-modal').classList.remove('open');
-            document.body.classList.remove('modal-open');
-        }
-
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-        document.getElementById('proj-modal').addEventListener('click', e => {
-            if (e.target.id === 'proj-modal') closeModal();
-        });
-
-        /* ═══════════════════════════════════════════════════
-           MOTION LAYER
-           ═══════════════════════════════════════════════════ */
-        (function () {
-            'use strict';
-
-            const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-            /* ── Split hero name into characters ───────────── */
-            document.querySelectorAll('[data-split-chars]').forEach(el => {
-                let i = 0;
-                el.innerHTML = el.innerHTML.split(/(<br\s*\/?>)/i).map(part =>
-                    /^<br/i.test(part)
-                        ? part
-                        : part.replace(/\S/g, c =>
-                            `<span class="ch" style="animation-delay:${(0.35 + i++ * 0.035).toFixed(3)}s">${c}</span>`)
-                ).join('');
-            });
-
-            /* ── Split section titles into words ───────────── */
-            document.querySelectorAll('[data-split-words]').forEach(el => {
-                el.innerHTML = el.textContent.trim().split(/\s+/).map((w, i) =>
-                    `<span class="word" style="transition-delay:${(0.06 + i * 0.07).toFixed(2)}s">${w}</span>`
-                ).join(' ');
-            });
-
-            /* ── Scroll progress, sticky nav, back-to-top ──── */
-            const navEl = document.querySelector('nav');
-            const toTop = document.getElementById('to-top');
-            let queued = false;
-
-            function onScroll() {
-                const y = scrollY;
-                navEl.classList.toggle('stuck', y > 12);
-                toTop.classList.toggle('show', y > 700);
-                queued = false;
-            }
-
-            addEventListener('scroll', () => {
-                if (!queued) { queued = true; requestAnimationFrame(onScroll); }
-            }, { passive: true });
-            onScroll();
-
-            toTop.addEventListener('click', () =>
-                scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }));
-
-            /* ── Nav scroll-spy ────────────────────────────── */
-            const links = new Map();
-            document.querySelectorAll('.nav-links a[href^="#"]').forEach(a =>
-                links.set(a.getAttribute('href').slice(1), a));
-
-            const spy = new IntersectionObserver(entries => {
-                entries.forEach(e => {
-                    if (!e.isIntersecting) return;
-                    const link = links.get(e.target.id);
-                    if (!link) return;
-                    links.forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
-                });
-            }, { rootMargin: '-45% 0px -50% 0px' });
-
-            links.forEach((_, id) => {
-                const sec = document.getElementById(id);
-                if (sec) spy.observe(sec);
-            });
-
-            /* ── Animated stat counters ────────────────────── */
-            const counters = new IntersectionObserver(entries => {
-                entries.forEach(e => {
-                    if (!e.isIntersecting) return;
-                    counters.unobserve(e.target);
-                    const el = e.target;
-                    const target = parseFloat(el.dataset.count);
-                    const suffix = el.dataset.suffix || '';
-                    if (reduced) { el.textContent = target + suffix; return; }
-                    const t0 = performance.now(), dur = 1500;
-                    requestAnimationFrame(function step(now) {
-                        const p = Math.min((now - t0) / dur, 1);
-                        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suffix;
-                        if (p < 1) requestAnimationFrame(step);
-                    });
-                });
-            }, { threshold: 0.6 });
-            document.querySelectorAll('[data-count]').forEach(el => counters.observe(el));
-
-            /* ── Cursor-follow spotlight on project cards ──── */
-            document.querySelectorAll('.project-card').forEach(card => {
-                card.addEventListener('pointermove', e => {
-                    const r = card.getBoundingClientRect();
-                    card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-                    card.style.setProperty('--my', (e.clientY - r.top) + 'px');
-                });
-            });
-
-            /* ── Sheen that follows the cursor across buttons ─ */
-            document.querySelectorAll('.btn').forEach(btn => {
-                btn.addEventListener('pointermove', e => {
-                    const r = btn.getBoundingClientRect();
-                    btn.style.setProperty('--bx', (e.clientX - r.left) + 'px');
-                    btn.style.setProperty('--by', (e.clientY - r.top) + 'px');
-                });
-            });
-
-            if (finePointer && !reduced) {
-                /* ── 3D tilt on the hero portrait ──────────── */
-                const wrap = document.querySelector('.hero-img-wrap');
-                const frame = document.querySelector('.hero-img-frame');
-                if (wrap && frame) {
-                    wrap.addEventListener('pointermove', e => {
-                        const r = frame.getBoundingClientRect();
-                        const px = (e.clientX - r.left) / r.width - .5;
-                        const py = (e.clientY - r.top) / r.height - .5;
-                        frame.style.transform =
-                            `perspective(1100px) rotateY(${px * 10}deg) rotateX(${-py * 10}deg) scale(1.02)`;
-                    });
-                    wrap.addEventListener('pointerleave', () => { frame.style.transform = ''; });
-                }
-
-                /* ── Magnetic hero buttons ─────────────────── */
-                document.querySelectorAll('.hero-actions .btn').forEach(btn => {
-                    btn.addEventListener('pointermove', e => {
-                        const r = btn.getBoundingClientRect();
-                        const x = e.clientX - r.left - r.width / 2;
-                        const y = e.clientY - r.top - r.height / 2;
-                        btn.style.transform = `translate(${x * .2}px, ${y * .28}px)`;
-                    });
-                    btn.addEventListener('pointerleave', () => { btn.style.transform = ''; });
-                });
-
-            }
-        })();
 
     </script>
 </body>

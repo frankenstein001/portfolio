@@ -1574,12 +1574,12 @@
             z-index: 0;
             pointer-events: none;
             background-image:
-                linear-gradient(var(--border-med) 1px, transparent 1px),
-                linear-gradient(90deg, var(--border-med) 1px, transparent 1px);
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
             background-size: 68px 68px;
             -webkit-mask-image: radial-gradient(ellipse 85% 65% at 50% 45%, #000 0%, transparent 78%);
             mask-image: radial-gradient(ellipse 85% 65% at 50% 45%, #000 0%, transparent 78%);
-            opacity: .8;
+            opacity: .5;
         }
 
         /* Cable runs */
@@ -1600,28 +1600,28 @@
 
         .cables .wire {
             stroke: var(--text);
-            stroke-width: 1.2;
-            opacity: .1;
+            stroke-width: 1.1;
+            opacity: .045;
         }
 
         [data-theme="dark"] .cables .wire {
-            opacity: .14;
+            opacity: .06;
         }
 
         .cables .rail {
             stroke: var(--accent);
-            stroke-width: 1.1;
-            opacity: .2;
+            stroke-width: 1;
+            opacity: .075;
         }
 
         [data-theme="dark"] .cables .rail {
-            opacity: .26;
+            opacity: .1;
         }
 
         .cables .flow {
             stroke: var(--accent);
-            stroke-width: 1.8;
-            opacity: .55;
+            stroke-width: 1.6;
+            opacity: .28;
             stroke-dasharray: 3 320;
             animation: cable-flow 7s linear infinite;
         }
@@ -1637,14 +1637,14 @@
 
         .cables .node {
             fill: var(--accent);
-            opacity: .4;
+            opacity: .16;
         }
 
         .cables .node-ring {
             fill: none;
             stroke: var(--accent);
             stroke-width: 1;
-            opacity: .3;
+            opacity: .12;
             vector-effect: non-scaling-stroke;
         }
 
@@ -1702,4 +1702,231 @@
         @media (prefers-reduced-motion: reduce) {
             .cables .flow { animation: none; opacity: .25 }
             .patch-strip i.live { animation: none }
+        }
+
+        /* ─── SURVEILLANCE MAP CONSOLE ────────── */
+        .map-console {
+            margin-top: 32px;
+            border: 0.5px solid var(--border-med);
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: #04070a;
+            box-shadow: var(--shadow-md);
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        }
+
+        .map-console-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 9px 14px;
+            background: rgba(99, 230, 255, .04);
+            border-bottom: 1px solid rgba(99, 230, 255, .14);
+            font-size: .62rem;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+            color: rgba(99, 230, 255, .62);
+        }
+
+        .map-console-bar.foot {
+            border-bottom: none;
+            border-top: 1px solid rgba(99, 230, 255, .14);
+            justify-content: space-between;
+        }
+
+        .mc-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #ff5d47;
+            box-shadow: 0 0 8px #ff5d47;
+            flex-shrink: 0;
+            animation: rec-blink 1.6s steps(1) infinite;
+        }
+
+        @keyframes rec-blink {
+            0%, 55% { opacity: 1 }
+            56%, 100% { opacity: .25 }
+        }
+
+        .mc-id { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+        .mc-status { color: rgba(99, 230, 255, .85); white-space: nowrap }
+
+        .map-frame {
+            position: relative;
+            isolation: isolate;
+        }
+
+        #map {
+            width: 100%;
+            height: 440px;
+            background: #04070a;
+            filter: saturate(.35) contrast(1.18) brightness(.72) hue-rotate(160deg);
+        }
+
+        .map-hud {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
+            overflow: hidden;
+            /* Leave the bottom strip untouched so Google's logo and
+               attribution stay fully legible, as their terms require. */
+            -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 28px), transparent calc(100% - 28px));
+            mask-image: linear-gradient(to bottom, #000 calc(100% - 28px), transparent calc(100% - 28px));
+        }
+
+        /* scanline texture + vignette */
+        .map-hud::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                repeating-linear-gradient(0deg, rgba(99, 230, 255, .05) 0 1px, transparent 1px 3px),
+                radial-gradient(ellipse 70% 60% at 50% 50%, transparent 45%, rgba(2, 6, 10, .82) 100%);
+        }
+
+        .hud-corner {
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            border: 2px solid rgba(99, 230, 255, .55);
+        }
+
+        .hud-corner.tl { top: 14px; left: 14px; border-right: 0; border-bottom: 0 }
+        .hud-corner.tr { top: 14px; right: 14px; border-left: 0; border-bottom: 0 }
+        .hud-corner.bl { bottom: 40px; left: 14px; border-right: 0; border-top: 0 }
+        .hud-corner.br { bottom: 40px; right: 14px; border-left: 0; border-top: 0 }
+
+        .hud-scan {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 68px;
+            background: linear-gradient(to bottom, transparent, rgba(99, 230, 255, .1) 60%, rgba(99, 230, 255, .3));
+            border-bottom: 1px solid rgba(99, 230, 255, .45);
+            animation: hud-sweep 6.5s linear infinite;
+        }
+
+        @keyframes hud-sweep {
+            0% { transform: translateY(-70px) }
+            100% { transform: translateY(460px) }
+        }
+
+        .hud-tag {
+            position: absolute;
+            font-size: .58rem;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: rgba(99, 230, 255, .78);
+            background: rgba(4, 7, 10, .58);
+            border: 1px solid rgba(99, 230, 255, .2);
+            padding: 3px 8px;
+            white-space: nowrap;
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+        }
+
+        .hud-tag b { color: #8df0ff; font-weight: 700 }
+
+        .hud-tag.t1 { top: 48px; left: 22px }
+        .hud-tag.t2 { top: 74px; left: 22px }
+        .hud-tag.t3 { bottom: 74px; left: 22px }
+        .hud-tag.t4 { top: 48px; right: 22px }
+
+        @media(max-width:640px) {
+            #map { height: 340px }
+            .hud-tag.t2 { display: none }
+            .hud-tag { font-size: .53rem }
+            @keyframes hud-sweep {
+                0% { transform: translateY(-70px) }
+                100% { transform: translateY(360px) }
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hud-scan { animation: none; opacity: .35 }
+            .mc-dot { animation: none }
+        }
+
+        /* Tactical reticle — lives above the map filter so it stays bright */
+        .hud-reticle {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 0;
+            height: 0;
+            will-change: left, top;
+        }
+
+        .hud-reticle i {
+            position: absolute;
+            left: 0;
+            top: 0;
+            translate: -50% -50%;
+            display: block;
+            border-radius: 50%;
+        }
+
+        .r-ring {
+            border: 1px solid rgba(99, 230, 255, .45);
+        }
+
+        .r1 { width: 52px; height: 52px }
+
+        .r2 {
+            width: 122px;
+            height: 122px;
+            border-style: dashed;
+            border-color: rgba(99, 230, 255, .3);
+            animation: reticle-spin 22s linear infinite;
+        }
+
+        .r3 {
+            width: 208px;
+            height: 208px;
+            border-color: rgba(99, 230, 255, .16);
+        }
+
+        @keyframes reticle-spin {
+            to { rotate: 360deg }
+        }
+
+        .r-ping {
+            width: 52px;
+            height: 52px;
+            border: 1.5px solid rgba(99, 230, 255, .85);
+            animation: reticle-ping 2.8s cubic-bezier(0, .5, .5, 1) infinite;
+        }
+
+        @keyframes reticle-ping {
+            0% { scale: 1; opacity: .85 }
+            100% { scale: 4; opacity: 0 }
+        }
+
+        .r-cross {
+            width: 88px;
+            height: 88px;
+            border-radius: 0;
+            background:
+                linear-gradient(rgba(99, 230, 255, .7), rgba(99, 230, 255, .7)) 50% 0 / 1.5px 22px no-repeat,
+                linear-gradient(rgba(99, 230, 255, .7), rgba(99, 230, 255, .7)) 50% 100% / 1.5px 22px no-repeat,
+                linear-gradient(rgba(99, 230, 255, .7), rgba(99, 230, 255, .7)) 0 50% / 22px 1.5px no-repeat,
+                linear-gradient(rgba(99, 230, 255, .7), rgba(99, 230, 255, .7)) 100% 50% / 22px 1.5px no-repeat;
+        }
+
+        .r-dot {
+            width: 7px;
+            height: 7px;
+            background: #8df0ff;
+            box-shadow: 0 0 12px rgba(99, 230, 255, .9);
+        }
+
+        @media(max-width:640px) {
+            .r3 { display: none }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .r-ping, .r2 { animation: none }
+            .r-ping { opacity: .4 }
         }
