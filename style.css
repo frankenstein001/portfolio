@@ -1101,19 +1101,6 @@
 
         /* ─── ANIMATION LAYER ─────────────────── */
 
-        /* Scroll progress */
-        #scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 2px;
-            width: 100%;
-            transform: scaleX(0);
-            transform-origin: 0 50%;
-            background: var(--accent);
-            z-index: 1001;
-            will-change: transform;
-        }
 
         nav {
             transition: background .35s, border-color .35s, box-shadow .35s;
@@ -1516,4 +1503,203 @@
                 opacity: 1;
                 transform: none;
             }
+        }
+
+        /* ─── COMPACT INFRA CARDS ─────────────── */
+        .infra-group {
+            margin-top: 48px;
+        }
+
+        .cover-grid.compact {
+            grid-template-columns: repeat(auto-fill, minmax(min(100%, 215px), 1fr));
+            gap: 12px;
+            margin-bottom: 0;
+        }
+
+        .cover-grid.compact .project-card {
+            border-radius: 14px;
+        }
+
+        .cover-grid.compact .project-card.has-cover {
+            padding: 0 0 16px;
+        }
+
+        .cover-grid.compact .proj-cover {
+            border-radius: 14px 14px 0 0;
+            margin-bottom: 14px;
+        }
+
+        .cover-grid.compact .proj-title {
+            font-size: .86rem;
+            margin: 0 16px 6px;
+        }
+
+        .cover-grid.compact .proj-desc {
+            font-size: .76rem;
+            line-height: 1.55;
+            margin: 0 16px 12px;
+        }
+
+        .cover-grid.compact .proj-tag {
+            font-size: .63rem;
+            padding: 3px 9px;
+            margin-left: 16px;
+            margin-right: 16px;
+        }
+
+        .cover-grid.compact .project-card.has-cover::after {
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+            font-size: .8rem;
+        }
+
+        /* ─── DATA CENTRE LAYER ───────────────── */
+        section,
+        header {
+            position: relative;
+        }
+
+        section > .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Rack grid — faint structural lattice behind every section */
+        section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(var(--border-med) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-med) 1px, transparent 1px);
+            background-size: 68px 68px;
+            -webkit-mask-image: radial-gradient(ellipse 85% 65% at 50% 45%, #000 0%, transparent 78%);
+            mask-image: radial-gradient(ellipse 85% 65% at 50% 45%, #000 0%, transparent 78%);
+            opacity: .8;
+        }
+
+        /* Cable runs */
+        .cables {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .cables path {
+            fill: none;
+            vector-effect: non-scaling-stroke;
+            stroke-linecap: round;
+        }
+
+        .cables .wire {
+            stroke: var(--text);
+            stroke-width: 1.2;
+            opacity: .1;
+        }
+
+        [data-theme="dark"] .cables .wire {
+            opacity: .14;
+        }
+
+        .cables .rail {
+            stroke: var(--accent);
+            stroke-width: 1.1;
+            opacity: .2;
+        }
+
+        [data-theme="dark"] .cables .rail {
+            opacity: .26;
+        }
+
+        .cables .flow {
+            stroke: var(--accent);
+            stroke-width: 1.8;
+            opacity: .55;
+            stroke-dasharray: 3 320;
+            animation: cable-flow 7s linear infinite;
+        }
+
+        .cables .flow.d1 { animation-duration: 9s; animation-delay: -2s }
+        .cables .flow.d2 { animation-duration: 11s; animation-delay: -5s }
+        .cables .flow.d3 { animation-duration: 8s; animation-delay: -3.5s }
+
+        @keyframes cable-flow {
+            from { stroke-dashoffset: 323 }
+            to { stroke-dashoffset: 0 }
+        }
+
+        .cables .node {
+            fill: var(--accent);
+            opacity: .4;
+        }
+
+        .cables .node-ring {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 1;
+            opacity: .3;
+            vector-effect: non-scaling-stroke;
+        }
+
+        /* Patch-panel strip separating sections */
+        .patch-strip {
+            position: relative;
+            height: 34px;
+            background: var(--bg-alt);
+            border-block: 0.5px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 clamp(20px, 5%, 48px);
+        }
+
+        .patch-strip i {
+            width: 9px;
+            height: 9px;
+            border-radius: 2px;
+            border: 1px solid var(--border-med);
+            flex-shrink: 0;
+        }
+
+        .patch-strip i.live {
+            background: var(--accent);
+            border-color: transparent;
+            animation: port-blink 3.4s steps(1) infinite;
+        }
+
+        .patch-strip i.live:nth-child(4n) { animation-delay: -.7s }
+        .patch-strip i.live:nth-child(3n) { animation-delay: -1.6s }
+        .patch-strip i.live:nth-child(5n) { animation-delay: -2.4s }
+
+        @keyframes port-blink {
+            0%, 45% { opacity: 1 }
+            50%, 100% { opacity: .22 }
+        }
+
+        .patch-label {
+            margin-left: auto;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: .6rem;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            white-space: nowrap;
+        }
+
+        @media(max-width:640px) {
+            .patch-strip { height: 28px }
+            .patch-label { display: none }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .cables .flow { animation: none; opacity: .25 }
+            .patch-strip i.live { animation: none }
         }

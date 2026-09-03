@@ -42,8 +42,6 @@
 
 <body>
 
-    <div id="scroll-progress"></div>
-
     <nav>
         <div class="nav-inner">
             <a href="#home" class="logo">Franklin Tripole</a>
@@ -80,8 +78,9 @@
                             width="15px" height="auto"></div>
                     <h1 class="hero-name" data-split-chars>Franklin<br>Tripole</h1>
                     <p class="hero-subtitle">
-                        Web developer based in <strong>Danao City, Philippines</strong>, turning complex designs into
-                        high-performance digital experiences — from polished agency sites to full-stack apps.
+                        Web developer based in <strong>Danao City, Philippines</strong>. I build and maintain
+                        production websites and web applications — and the server, network, and automation layer
+                        they run on.
                     </p>
                     <div class="hero-actions">
                         <a href="#projects" class="btn btn-primary">
@@ -115,20 +114,85 @@
             </div>
         </div>
         <canvas id="hero-canvas"></canvas>
+        <svg class="cables" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <path class="wire" d="M-60 140 C 260 250 620 60 1500 200" />
+            <path class="wire" d="M-60 330 C 380 460 880 250 1500 380" />
+            <path class="wire" d="M-60 560 C 320 690 820 480 1500 610" />
+            <path class="wire" d="M-60 780 C 300 880 760 700 1500 830" />
+            <path class="rail" d="M-60 220 H 240 V 470 H 640 V 700 H 1500" />
+            <path class="rail" d="M1500 120 H 1140 V 360 H 820 V 590 H -60" />
+            <path class="flow d1" d="M-60 220 H 240 V 470 H 640 V 700 H 1500" />
+            <path class="flow d2" d="M-60 330 C 380 460 880 250 1500 380" />
+            <path class="flow d3" d="M1500 120 H 1140 V 360 H 820 V 590 H -60" />
+            <path class="flow" d="M-60 560 C 320 690 820 480 1500 610" />
+            <circle class="node" cx="240" cy="220" r="3" />
+            <circle class="node-ring" cx="240" cy="220" r="7" />
+            <circle class="node" cx="240" cy="470" r="3" />
+            <circle class="node-ring" cx="240" cy="470" r="7" />
+            <circle class="node" cx="640" cy="470" r="3" />
+            <circle class="node-ring" cx="640" cy="470" r="7" />
+            <circle class="node" cx="640" cy="700" r="3" />
+            <circle class="node-ring" cx="640" cy="700" r="7" />
+            <circle class="node" cx="1140" cy="120" r="3" />
+            <circle class="node-ring" cx="1140" cy="120" r="7" />
+            <circle class="node" cx="1140" cy="360" r="3" />
+            <circle class="node-ring" cx="1140" cy="360" r="7" />
+            <circle class="node" cx="820" cy="360" r="3" />
+            <circle class="node-ring" cx="820" cy="360" r="7" />
+            <circle class="node" cx="820" cy="590" r="3" />
+            <circle class="node-ring" cx="820" cy="590" r="7" />
+        </svg>
     </header>
 
+    <div class="patch-strip" aria-hidden="true">
+        <i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i>
+        <span class="patch-label">PATCH PANEL / 01</span>
+    </div>
+
     <section id="about" class="reveal">
+        <svg class="cables" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <path class="wire" d="M-60 140 C 260 250 620 60 1500 200" />
+            <path class="wire" d="M-60 330 C 380 460 880 250 1500 380" />
+            <path class="wire" d="M-60 560 C 320 690 820 480 1500 610" />
+            <path class="wire" d="M-60 780 C 300 880 760 700 1500 830" />
+            <path class="rail" d="M-60 220 H 240 V 470 H 640 V 700 H 1500" />
+            <path class="rail" d="M1500 120 H 1140 V 360 H 820 V 590 H -60" />
+            <path class="flow d1" d="M-60 220 H 240 V 470 H 640 V 700 H 1500" />
+            <path class="flow d2" d="M-60 330 C 380 460 880 250 1500 380" />
+            <path class="flow d3" d="M1500 120 H 1140 V 360 H 820 V 590 H -60" />
+            <path class="flow" d="M-60 560 C 320 690 820 480 1500 610" />
+            <circle class="node" cx="240" cy="220" r="3" />
+            <circle class="node-ring" cx="240" cy="220" r="7" />
+            <circle class="node" cx="240" cy="470" r="3" />
+            <circle class="node-ring" cx="240" cy="470" r="7" />
+            <circle class="node" cx="640" cy="470" r="3" />
+            <circle class="node-ring" cx="640" cy="470" r="7" />
+            <circle class="node" cx="640" cy="700" r="3" />
+            <circle class="node-ring" cx="640" cy="700" r="7" />
+            <circle class="node" cx="1140" cy="120" r="3" />
+            <circle class="node-ring" cx="1140" cy="120" r="7" />
+            <circle class="node" cx="1140" cy="360" r="3" />
+            <circle class="node-ring" cx="1140" cy="360" r="7" />
+            <circle class="node" cx="820" cy="360" r="3" />
+            <circle class="node-ring" cx="820" cy="360" r="7" />
+            <circle class="node" cx="820" cy="590" r="3" />
+            <circle class="node-ring" cx="820" cy="590" r="7" />
+        </svg>
         <div class="container">
             <div class="section-eyebrow">01 / About</div>
             <div class="about-grid">
                 <div>
-                    <h2 class="section-title" data-split-words>Who I Am</h2>
+                    <h2 class="section-title" data-split-words>Background</h2>
                     <p class="about-text">
-                        I'm a developer based in <strong>Danao City, Philippines</strong>, specialising in turning
-                        complex designs
-                        into high-performance web experiences. My work bridges the gap between sleek UI and solid
-                        technical execution — whether that's a polished agency site, a full-stack web app, or a
-                        mobile-optimised system.
+                        I build web platforms end to end, from <strong>interface implementation</strong> through to
+                        the <strong>infrastructure they are deployed on</strong>. Most of my work is client-facing
+                        agency and product sites, where the brief arrives as a design file and the requirement is a
+                        fast, accessible, maintainable build.
+                    </p>
+                    <p class="about-text" style="margin-top:16px;">
+                        Alongside that I run my own server and network environment — containerised services, segmented
+                        VLANs, local DNS, and automated workflows. It is where I test deployments and failure scenarios
+                        before they reach anything a client depends on.
                     </p>
                     
                     <div class="stack-group" style="margin-top: 48px;">
@@ -163,6 +227,15 @@
                         </div>
 
                         <div class="tech-category">
+                            <h3>Platforms</h3>
+                            <div class="badge-grid">
+                                <img src="https://img.shields.io/badge/Webflow-146EF5?style=for-the-badge&logo=webflow&logoColor=white" alt="Webflow">
+                                <img src="https://img.shields.io/badge/n8n-EA4B71?style=for-the-badge&logo=n8n&logoColor=white" alt="n8n">
+                                <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
+                            </div>
+                        </div>
+
+                        <div class="tech-category">
                             <h3>Concepts & Tools</h3>
                             <div class="badge-grid">
                                 <img src="https://img.shields.io/badge/Virtual%20Machines-0078D4?style=for-the-badge&logo=virtualbox&logoColor=white" alt="Virtual Machines">
@@ -188,8 +261,38 @@
                             <div class="lbl">Company sites</div>
                         </div>
                         <div class="stat-card">
-                            <div class="num">∞</div>
-                            <div class="lbl">Caffeine units</div>
+                            <div class="num">24/7</div>
+                            <div class="lbl">Lab uptime</div>
+                        </div>
+                    </div>
+
+                    <div class="infra-group">
+                        <div class="stack-title">Infrastructure &amp; tooling</div>
+                        <div class="project-grid cover-grid compact stagger">
+                            <div class="project-card has-cover" onclick="openModal('server')">
+                                <div class="proj-cover"><img src="./assets/server.png" alt="Self-hosted Linux server" loading="lazy"></div>
+                                <div class="proj-title">Self-Hosted Server</div>
+                                <p class="proj-desc">Bare-metal Linux host running containerised services behind a reverse proxy.</p>
+                                <span class="proj-tag">Infrastructure</span>
+                            </div>
+                            <div class="project-card has-cover" onclick="openModal('networking')">
+                                <div class="proj-cover"><img src="./assets/networking.png" alt="Segmented home network" loading="lazy"></div>
+                                <div class="proj-title">Network Architecture</div>
+                                <p class="proj-desc">Segmented VLANs, local DNS resolution, and packet-level visibility.</p>
+                                <span class="proj-tag">Networking</span>
+                            </div>
+                            <div class="project-card has-cover" onclick="openModal('vscode')">
+                                <div class="proj-cover"><img src="./assets/vscode.png" alt="VS Code environment" loading="lazy"></div>
+                                <div class="proj-title">Development Environment</div>
+                                <p class="proj-desc">Linting, formatting, and version control enforced at the editor level.</p>
+                                <span class="proj-tag">Workflow</span>
+                            </div>
+                            <div class="project-card has-cover" onclick="openModal('n8n')">
+                                <div class="proj-cover"><img src="./assets/n8n.png" alt="n8n automation workflows" loading="lazy"></div>
+                                <div class="proj-title">Workflow Automation</div>
+                                <p class="proj-desc">Self-hosted pipelines handling routing, monitoring, and data sync.</p>
+                                <span class="proj-tag">Automation</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -198,6 +301,34 @@
     </section>
 
     <section id="experience" class="reveal">
+        <svg class="cables" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <path class="wire" d="M-60 140 C 260 250 620 60 1500 200" />
+            <path class="wire" d="M-60 330 C 380 460 880 250 1500 380" />
+            <path class="wire" d="M-60 560 C 320 690 820 480 1500 610" />
+            <path class="wire" d="M-60 780 C 300 880 760 700 1500 830" />
+            <path class="rail" d="M-60 220 H 240 V 470 H 640 V 700 H 1500" />
+            <path class="rail" d="M1500 120 H 1140 V 360 H 820 V 590 H -60" />
+            <path class="flow d1" d="M-60 220 H 240 V 470 H 640 V 700 H 1500" />
+            <path class="flow d2" d="M-60 330 C 380 460 880 250 1500 380" />
+            <path class="flow d3" d="M1500 120 H 1140 V 360 H 820 V 590 H -60" />
+            <path class="flow" d="M-60 560 C 320 690 820 480 1500 610" />
+            <circle class="node" cx="240" cy="220" r="3" />
+            <circle class="node-ring" cx="240" cy="220" r="7" />
+            <circle class="node" cx="240" cy="470" r="3" />
+            <circle class="node-ring" cx="240" cy="470" r="7" />
+            <circle class="node" cx="640" cy="470" r="3" />
+            <circle class="node-ring" cx="640" cy="470" r="7" />
+            <circle class="node" cx="640" cy="700" r="3" />
+            <circle class="node-ring" cx="640" cy="700" r="7" />
+            <circle class="node" cx="1140" cy="120" r="3" />
+            <circle class="node-ring" cx="1140" cy="120" r="7" />
+            <circle class="node" cx="1140" cy="360" r="3" />
+            <circle class="node-ring" cx="1140" cy="360" r="7" />
+            <circle class="node" cx="820" cy="360" r="3" />
+            <circle class="node-ring" cx="820" cy="360" r="7" />
+            <circle class="node" cx="820" cy="590" r="3" />
+            <circle class="node-ring" cx="820" cy="590" r="7" />
+        </svg>
         <div class="container">
             <div class="section-eyebrow">02 / Experience</div>
             <h2 class="section-title" data-split-words>Where I've Worked</h2>
@@ -214,9 +345,10 @@
                     <h4>Web Developer</h4>
                     <div class="exp-meta">HPPY Hour Agency <span class="exp-meta-sep">·</span> <span
                             class="exp-meta-time">2024 - Present</span></div>
-                    <p>Developing high-performance agency hubs and client websites with a focus on Go-To-Market
-                        strategies, brand identity, and scalable digital solutions. Utilising modern web technologies
-                        and Webflow to deliver polished, conversion-optimised experiences.</p>
+                    <p>Build and maintain client websites and the agency's own platforms, working from design
+                        files through to production. Responsible for responsive implementation, CMS architecture,
+                        interaction work, and page performance, with an ongoing focus on conversion and accessibility
+                        across the portfolio.</p>
                 </div>
             </div>
             <div class="exp-card">
@@ -231,10 +363,10 @@
                     <h4>Media Editor</h4>
                     <div class="exp-meta">DB Consulting <span class="exp-meta-sep">·</span> <span
                             class="exp-meta-time">2023 </span></div>
-                    <p>Edited videos, music, and photos to help clients tell their stories on social media and the web.
-                        Handled the full editing process, including color fixing, sound design, and photo retouching.
-                        Produced and edited music/audio to match video content.
-                        Managed all client communication and made sure every project was delivered on time</p>
+                    <p>Delivered video, audio, and photographic content for client campaigns across social and
+                        web. Owned the full post-production pipeline — colour grading, sound design, and retouching —
+                        alongside original audio production. Managed client communication and delivery schedules
+                        directly.</p>
                 </div>
             </div>
             </div>
@@ -242,6 +374,34 @@
     </section>
 
     <section id="projects" class="reveal">
+        <svg class="cables" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <path class="wire" d="M-60 140 C 260 250 620 60 1500 200" />
+            <path class="wire" d="M-60 330 C 380 460 880 250 1500 380" />
+            <path class="wire" d="M-60 560 C 320 690 820 480 1500 610" />
+            <path class="wire" d="M-60 780 C 300 880 760 700 1500 830" />
+            <path class="rail" d="M-60 220 H 240 V 470 H 640 V 700 H 1500" />
+            <path class="rail" d="M1500 120 H 1140 V 360 H 820 V 590 H -60" />
+            <path class="flow d1" d="M-60 220 H 240 V 470 H 640 V 700 H 1500" />
+            <path class="flow d2" d="M-60 330 C 380 460 880 250 1500 380" />
+            <path class="flow d3" d="M1500 120 H 1140 V 360 H 820 V 590 H -60" />
+            <path class="flow" d="M-60 560 C 320 690 820 480 1500 610" />
+            <circle class="node" cx="240" cy="220" r="3" />
+            <circle class="node-ring" cx="240" cy="220" r="7" />
+            <circle class="node" cx="240" cy="470" r="3" />
+            <circle class="node-ring" cx="240" cy="470" r="7" />
+            <circle class="node" cx="640" cy="470" r="3" />
+            <circle class="node-ring" cx="640" cy="470" r="7" />
+            <circle class="node" cx="640" cy="700" r="3" />
+            <circle class="node-ring" cx="640" cy="700" r="7" />
+            <circle class="node" cx="1140" cy="120" r="3" />
+            <circle class="node-ring" cx="1140" cy="120" r="7" />
+            <circle class="node" cx="1140" cy="360" r="3" />
+            <circle class="node-ring" cx="1140" cy="360" r="7" />
+            <circle class="node" cx="820" cy="360" r="3" />
+            <circle class="node-ring" cx="820" cy="360" r="7" />
+            <circle class="node" cx="820" cy="590" r="3" />
+            <circle class="node-ring" cx="820" cy="590" r="7" />
+        </svg>
         <div class="container">
             <div class="section-eyebrow">03 / Work</div>
             <h2 class="section-title" data-split-words>Projects</h2>
@@ -271,44 +431,49 @@
                 </div>
             </div>
 
-            <div class="category-head"><span class="cat-label">Personal Builds</span><span class="cat-line"></span>
-            </div>
-            <div class="project-grid cover-grid stagger">
-                <div class="project-card has-cover" onclick="openModal('server')">
-                    <div class="proj-cover"><img src="./assets/server.png" alt="Home server" loading="lazy"></div>
-                    <div class="proj-title">Self-Hosted Server</div>
-                    <p class="proj-desc">A machine in the corner of my room that quietly runs half my life.</p>
-                    <span class="proj-tag">Personal Build</span>
-                </div>
-                <div class="project-card has-cover" onclick="openModal('networking')">
-                    <div class="proj-cover"><img src="./assets/networking.png" alt="Home network" loading="lazy"></div>
-                    <div class="proj-title">Home Network</div>
-                    <p class="proj-desc">VLANs, DNS, and a handful of rules that keep the noisy devices in their own corner.</p>
-                    <span class="proj-tag">Personal Build</span>
-                </div>
-                <div class="project-card has-cover" onclick="openModal('vscode')">
-                    <div class="proj-cover"><img src="./assets/vscode.png" alt="VS Code setup" loading="lazy"></div>
-                    <div class="proj-title">My VS Code Setup</div>
-                    <p class="proj-desc">Code that feels clean. Every extension and keybind has to earn its spot.</p>
-                    <span class="proj-tag">Workflow</span>
-                </div>
-                <div class="project-card has-cover" onclick="openModal('n8n')">
-                    <div class="proj-cover"><img src="./assets/n8n.png" alt="n8n workflows" loading="lazy"></div>
-                    <div class="proj-title">n8n Automations</div>
-                    <p class="proj-desc">Small workflows that handle the boring parts so I don't have to.</p>
-                    <span class="proj-tag">Automation</span>
-                </div>
-            </div>
         </div>
     </section>
 
     <section id="location" class="reveal">
+        <svg class="cables" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <path class="wire" d="M-60 140 C 260 250 620 60 1500 200" />
+            <path class="wire" d="M-60 330 C 380 460 880 250 1500 380" />
+            <path class="wire" d="M-60 560 C 320 690 820 480 1500 610" />
+            <path class="wire" d="M-60 780 C 300 880 760 700 1500 830" />
+            <path class="rail" d="M-60 220 H 240 V 470 H 640 V 700 H 1500" />
+            <path class="rail" d="M1500 120 H 1140 V 360 H 820 V 590 H -60" />
+            <path class="flow d1" d="M-60 220 H 240 V 470 H 640 V 700 H 1500" />
+            <path class="flow d2" d="M-60 330 C 380 460 880 250 1500 380" />
+            <path class="flow d3" d="M1500 120 H 1140 V 360 H 820 V 590 H -60" />
+            <path class="flow" d="M-60 560 C 320 690 820 480 1500 610" />
+            <circle class="node" cx="240" cy="220" r="3" />
+            <circle class="node-ring" cx="240" cy="220" r="7" />
+            <circle class="node" cx="240" cy="470" r="3" />
+            <circle class="node-ring" cx="240" cy="470" r="7" />
+            <circle class="node" cx="640" cy="470" r="3" />
+            <circle class="node-ring" cx="640" cy="470" r="7" />
+            <circle class="node" cx="640" cy="700" r="3" />
+            <circle class="node-ring" cx="640" cy="700" r="7" />
+            <circle class="node" cx="1140" cy="120" r="3" />
+            <circle class="node-ring" cx="1140" cy="120" r="7" />
+            <circle class="node" cx="1140" cy="360" r="3" />
+            <circle class="node-ring" cx="1140" cy="360" r="7" />
+            <circle class="node" cx="820" cy="360" r="3" />
+            <circle class="node-ring" cx="820" cy="360" r="7" />
+            <circle class="node" cx="820" cy="590" r="3" />
+            <circle class="node-ring" cx="820" cy="590" r="7" />
+        </svg>
         <div class="container">
             <div class="section-eyebrow">04 / Danao City Cebu</div>
             <h2 class="section-title" data-split-words>Where I'm Based</h2>
             <div id="map" style="margin-top: 32px;"></div>
         </div>
     </section>
+
+    <div class="patch-strip" aria-hidden="true">
+        <i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i class="live"></i>
+        <span class="patch-label">UPLINK / ACTIVE</span>
+    </div>
 
     <footer id="contact">
         <canvas id="footer-canvas"></canvas>
@@ -600,32 +765,32 @@
                 video: 'hppy.mp4'
             },
             server: {
-                name: "Self-Hosted Server", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="7" rx="2"/><rect x="2" y="14" width="20" height="7" rx="2"/><path d="M6 6.5h.01M6 17.5h.01M10 6.5h.01M10 17.5h.01"/></svg>', tag: "Personal Build",
+                name: "Self-Hosted Server", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="7" rx="2"/><rect x="2" y="14" width="20" height="7" rx="2"/><path d="M6 6.5h.01M6 17.5h.01M10 6.5h.01M10 17.5h.01"/></svg>', tag: "Infrastructure",
                 image: './assets/server.png',
-                desc: "What started as a spare PC I couldn't bring myself to throw out now runs most of the things I rely on. It hosts my side projects, keeps backups of everything I'd hate to lose, and gives me somewhere to break things without breaking anything that matters.",
-                roleLabel: "What runs on it",
-                role: "Ubuntu Server underneath, Docker for anything I don't want polluting the host, Nginx handling traffic, and a Cloudflare Tunnel so I never had to touch port forwarding. I've rebuilt it three times — the first two taught me why backups exist."
-            },
-            vscode: {
-                name: "My VS Code Setup", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m8 17-5-5 5-5"/><path d="m16 7 5 5-5 5"/><path d="m13.5 4-3 16"/></svg>', tag: "Workflow",
-                image: './assets/vscode.png',
-                desc: "I spend most of my day inside this editor, so I've put an unreasonable amount of time into making it feel right. Nothing flashy — just a setup that stays out of the way and makes it obvious the moment something is off.",
-                roleLabel: "How it's set up",
-                role: "A dark theme that doesn't fight my eyes at 2am, Prettier and ESLint running on save so I stop arguing with myself about formatting, GitLens for the \"who wrote this and why\" moments, and Live Server for quick checks. Plus snippets and keybinds for the things I type a hundred times a day."
+                desc: "A dedicated Linux host running my staging environments, internal tooling, and backup storage. It gives me a controlled environment to validate deployments, test failure scenarios, and rehearse recovery before any of it touches a production site.",
+                roleLabel: "Stack and configuration",
+                role: "Ubuntu Server as the base, Docker for service isolation, and Nginx handling reverse proxying and TLS termination. Remote access runs over a Cloudflare Tunnel, so no ports are exposed to the public internet. Scheduled snapshots cover backups, and the configuration is documented well enough to rebuild the host from scratch."
             },
             networking: {
-                name: "Home Network", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="6" rx="1.5"/><rect x="2" y="15" width="6" height="6" rx="1.5"/><rect x="16" y="15" width="6" height="6" rx="1.5"/><path d="M12 9v3M5 15v-3h14v3"/></svg>', tag: "Personal Build",
+                name: "Network Architecture", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="6" rx="1.5"/><rect x="2" y="15" width="6" height="6" rx="1.5"/><rect x="16" y="15" width="6" height="6" rx="1.5"/><path d="M12 9v3M5 15v-3h14v3"/></svg>', tag: "Networking",
                 image: './assets/networking.png',
-                desc: "I got tired of guessing why the wifi was slow, so I stopped guessing. The network is segmented now, everything resolves through my own DNS, and I can finally see what's talking to what.",
-                roleLabel: "How it's wired",
-                role: "Pi-hole handling DNS and ad blocking for the whole house, VLANs keeping the IoT gear away from anything I care about, static leases so devices stop moving around on me, and a WireGuard tunnel for getting back in when I'm not home. Wireshark comes out whenever something looks off."
+                desc: "A segmented network built so that untrusted devices cannot reach the systems that matter, with local name resolution and genuine visibility into what is on the wire.",
+                roleLabel: "How it's configured",
+                role: "VLANs isolating IoT devices from workstations and servers, Pi-hole handling DNS and filtering network-wide, and static DHCP reservations for predictable addressing. Remote access runs over WireGuard. When something behaves unexpectedly, Wireshark is the first tool out."
+            },
+            vscode: {
+                name: "Development Environment", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m8 17-5-5 5-5"/><path d="m16 7 5 5-5 5"/><path d="m13.5 4-3 16"/></svg>', tag: "Workflow",
+                image: './assets/vscode.png',
+                desc: "A deliberately standardised editor setup. The objective is consistent output regardless of which project I am in, and catching problems at authoring time rather than in review.",
+                roleLabel: "Configuration",
+                role: "ESLint and Prettier enforced on save so formatting never reaches a diff, GitLens for inline blame and file history, and Live Server for rapid iteration against static builds. Custom snippets and keybindings cover the patterns I write repeatedly."
             },
             n8n: {
-                name: "n8n Automations", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="4.5" cy="12" r="2.5"/><circle cx="19.5" cy="6" r="2.5"/><circle cx="19.5" cy="18" r="2.5"/><circle cx="12" cy="12" r="2.5"/><path d="M7 12h2.5M14.5 11l2.8-3.5M14.5 13l2.8 3.5"/></svg>', tag: "Automation",
+                name: "Workflow Automation", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="4.5" cy="12" r="2.5"/><circle cx="19.5" cy="6" r="2.5"/><circle cx="19.5" cy="18" r="2.5"/><circle cx="12" cy="12" r="2.5"/><path d="M7 12h2.5M14.5 11l2.8-3.5M14.5 13l2.8 3.5"/></svg>', tag: "Automation",
                 image: './assets/n8n.png',
-                desc: "I kept catching myself doing the same handful of tasks every week — copying form entries somewhere, sending the same follow-up, checking whether a site was still up. n8n turned most of that into flows I set up once and mostly forget about.",
-                roleLabel: "What I've built with it",
-                role: "Self-hosted on the same box as everything else. Flows that push contact form submissions into a sheet and ping me on Telegram, a nightly uptime check that tells me before a client does, and a few that quietly move data between apps. Nothing huge — just enough to get a few hours back each week."
+                desc: "Self-hosted automation covering the recurring operational work around client sites: lead routing, uptime monitoring, and moving structured data between services on a schedule.",
+                roleLabel: "Workflows in production",
+                role: "Runs on the same infrastructure as everything else. Active flows route contact form submissions into a spreadsheet and raise a Telegram notification, run scheduled uptime checks against client sites with alerting on failure, and synchronise structured data between services at fixed intervals."
             }
         };
 
@@ -684,15 +849,12 @@
             });
 
             /* ── Scroll progress, sticky nav, back-to-top ──── */
-            const bar = document.getElementById('scroll-progress');
             const navEl = document.querySelector('nav');
             const toTop = document.getElementById('to-top');
             let queued = false;
 
             function onScroll() {
-                const max = document.documentElement.scrollHeight - innerHeight;
                 const y = scrollY;
-                bar.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
                 navEl.classList.toggle('stuck', y > 12);
                 toTop.classList.toggle('show', y > 700);
                 queued = false;
