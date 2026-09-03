@@ -42,6 +42,8 @@
 
 <body>
 
+    <div id="scroll-progress"></div>
+
     <nav>
         <div class="nav-inner">
             <a href="#home" class="logo">Franklin Tripole</a>
@@ -76,7 +78,7 @@
                 <div class="hero-content">
                     <div class="hero-eyebrow">Developer &amp; Builder <img src="./assets/philippines.png" alt="Philippines Flag"
                             width="15px" height="auto"></div>
-                    <h1 class="hero-name">Franklin<br>Tripole</h1>
+                    <h1 class="hero-name" data-split-chars>Franklin<br>Tripole</h1>
                     <p class="hero-subtitle">
                         Web developer based in <strong>Danao City, Philippines</strong>, turning complex designs into
                         high-performance digital experiences — from polished agency sites to full-stack apps.
@@ -120,7 +122,7 @@
             <div class="section-eyebrow">01 / About</div>
             <div class="about-grid">
                 <div>
-                    <h2 class="section-title">Who I Am</h2>
+                    <h2 class="section-title" data-split-words>Who I Am</h2>
                     <p class="about-text">
                         I'm a developer based in <strong>Danao City, Philippines</strong>, specialising in turning
                         complex designs
@@ -172,17 +174,17 @@
                         </div>
                     </div>
 
-                    <div class="stat-grid" style="margin-top: 48px;">
+                    <div class="stat-grid stagger" style="margin-top: 48px;">
                         <div class="stat-card">
-                            <div class="num">50+</div>
+                            <div class="num" data-count="50" data-suffix="+">0</div>
                             <div class="lbl">Projects shipped</div>
                         </div>
                         <div class="stat-card">
-                            <div class="num">2+</div>
+                            <div class="num" data-count="2" data-suffix="+">0</div>
                             <div class="lbl">Years building</div>
                         </div>
                         <div class="stat-card">
-                            <div class="num">10</div>
+                            <div class="num" data-count="10">0</div>
                             <div class="lbl">Company sites</div>
                         </div>
                         <div class="stat-card">
@@ -198,7 +200,8 @@
     <section id="experience" class="reveal">
         <div class="container">
             <div class="section-eyebrow">02 / Experience</div>
-            <h2 class="section-title">Where I've Worked</h2>
+            <h2 class="section-title" data-split-words>Where I've Worked</h2>
+            <div class="stagger" style="margin-top:28px;">
             <div class="exp-card">
                 <div class="exp-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
@@ -234,17 +237,18 @@
                         Managed all client communication and made sure every project was delivered on time</p>
                 </div>
             </div>
+            </div>
         </div>
     </section>
 
     <section id="projects" class="reveal">
         <div class="container">
             <div class="section-eyebrow">03 / Work</div>
-            <h2 class="section-title">Projects</h2>
+            <h2 class="section-title" data-split-words>Projects</h2>
 
             <div class="category-head"><span class="cat-label">Company Projects</span><span class="cat-line"></span>
             </div>
-            <div class="project-grid">
+            <div class="project-grid stagger">
                 <div class="project-card locked" onclick="openModal('hppygtm')">
                     <div class="proj-icon"><span class="proj-icon-text">HG</span></div>
                     <div class="proj-title">HPPY GTM</div>
@@ -266,13 +270,42 @@
                     <span class="proj-tag">Company Hub</span>
                 </div>
             </div>
+
+            <div class="category-head"><span class="cat-label">Personal Builds</span><span class="cat-line"></span>
+            </div>
+            <div class="project-grid cover-grid stagger">
+                <div class="project-card has-cover" onclick="openModal('server')">
+                    <div class="proj-cover"><img src="./assets/server.png" alt="Home server" loading="lazy"></div>
+                    <div class="proj-title">Self-Hosted Server</div>
+                    <p class="proj-desc">A machine in the corner of my room that quietly runs half my life.</p>
+                    <span class="proj-tag">Personal Build</span>
+                </div>
+                <div class="project-card has-cover" onclick="openModal('networking')">
+                    <div class="proj-cover"><img src="./assets/networking.png" alt="Home network" loading="lazy"></div>
+                    <div class="proj-title">Home Network</div>
+                    <p class="proj-desc">VLANs, DNS, and a handful of rules that keep the noisy devices in their own corner.</p>
+                    <span class="proj-tag">Personal Build</span>
+                </div>
+                <div class="project-card has-cover" onclick="openModal('vscode')">
+                    <div class="proj-cover"><img src="./assets/vscode.png" alt="VS Code setup" loading="lazy"></div>
+                    <div class="proj-title">My VS Code Setup</div>
+                    <p class="proj-desc">Code that feels clean. Every extension and keybind has to earn its spot.</p>
+                    <span class="proj-tag">Workflow</span>
+                </div>
+                <div class="project-card has-cover" onclick="openModal('n8n')">
+                    <div class="proj-cover"><img src="./assets/n8n.png" alt="n8n workflows" loading="lazy"></div>
+                    <div class="proj-title">n8n Automations</div>
+                    <p class="proj-desc">Small workflows that handle the boring parts so I don't have to.</p>
+                    <span class="proj-tag">Automation</span>
+                </div>
+            </div>
         </div>
     </section>
 
     <section id="location" class="reveal">
         <div class="container">
             <div class="section-eyebrow">04 / Danao City Cebu</div>
-            <h2 class="section-title">Where I'm Based</h2>
+            <h2 class="section-title" data-split-words>Where I'm Based</h2>
             <div id="map" style="margin-top: 32px;"></div>
         </div>
     </section>
@@ -297,6 +330,13 @@
         <div class="footer-copy">© 2026 Franklin Tripole. All rights reserved.</div>
     </footer>
 
+    <button id="to-top" aria-label="Back to top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M12 19V5M5 12l7-7 7 7" />
+        </svg>
+    </button>
+
     <div class="modal-backdrop" id="proj-modal">
         <div class="modal-box">
             <div class="modal-bar">
@@ -315,7 +355,7 @@
                     </div>
                     <p class="modal-desc" id="modal-desc"></p>
                     <div class="modal-role">
-                        <div class="modal-role-label">My Role</div>
+                        <div class="modal-role-label" id="modal-role-label">My Role</div>
                         <p id="modal-role"></p>
                     </div>
                 </div>
@@ -456,26 +496,52 @@
                 };
             }
 
+            const mouse = { x: -9999, y: -9999 };
+            const heroEl = canvas.closest('header');
+            if (heroEl && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+                heroEl.addEventListener('pointermove', e => {
+                    const r = canvas.getBoundingClientRect();
+                    mouse.x = e.clientX - r.left;
+                    mouse.y = e.clientY - r.top;
+                }, { passive: true });
+                heroEl.addEventListener('pointerleave', () => { mouse.x = mouse.y = -9999; });
+            }
+
             function draw() {
                 ctx.clearRect(0, 0, W, H);
+                const REACH = 140;
                 stars.forEach(s => {
                     s.x += s.vx; s.y += s.vy;
                     if (s.x < 0) s.x = W; if (s.x > W) s.x = 0;
                     if (s.y < 0) s.y = H; if (s.y > H) s.y = 0;
+
+                    // push away from the cursor and brighten as it nears
+                    const mx = s.x - mouse.x, my = s.y - mouse.y;
+                    const md = Math.sqrt(mx * mx + my * my);
+                    let glow = 1, alpha = s.a * 0.7;
+                    s.px = s.x; s.py = s.y;
+                    if (md < REACH && md > 0.01) {
+                        const force = (1 - md / REACH);
+                        s.px += (mx / md) * force * 28;
+                        s.py += (my / md) * force * 28;
+                        glow = 1 + force * 1.8;
+                        alpha = Math.min(1, s.a * 0.7 + force * 0.5);
+                    }
+
                     ctx.beginPath();
-                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(41,151,255,${s.a * 0.7})`;
+                    ctx.arc(s.px, s.py, s.r * glow, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(41,151,255,${alpha})`;
                     ctx.fill();
                 });
                 for (let i = 0; i < stars.length; i++) {
                     for (let j = i + 1; j < stars.length; j++) {
-                        const dx = stars[i].x - stars[j].x;
-                        const dy = stars[i].y - stars[j].y;
+                        const dx = stars[i].px - stars[j].px;
+                        const dy = stars[i].py - stars[j].py;
                         const d = Math.sqrt(dx * dx + dy * dy);
                         if (d < linkDistance) {
                             ctx.beginPath();
-                            ctx.moveTo(stars[i].x, stars[i].y);
-                            ctx.lineTo(stars[j].x, stars[j].y);
+                            ctx.moveTo(stars[i].px, stars[i].py);
+                            ctx.lineTo(stars[j].px, stars[j].py);
                             ctx.strokeStyle = `rgba(0,113,227,${(1 - d / linkDistance) * 0.2})`;
                             ctx.lineWidth = 0.5;
                             ctx.stroke();
@@ -532,6 +598,34 @@
                 desc: "The main agency hub for HPPY Hour — showcasing their creative services, team, and digital capabilities. Built to convert visitors into clients.",
                 role: "Core developer on the agency's own site. Handled the Webflow build, component architecture, page transitions, and ongoing maintenance as the site evolves.",
                 video: 'hppy.mp4'
+            },
+            server: {
+                name: "Self-Hosted Server", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="7" rx="2"/><rect x="2" y="14" width="20" height="7" rx="2"/><path d="M6 6.5h.01M6 17.5h.01M10 6.5h.01M10 17.5h.01"/></svg>', tag: "Personal Build",
+                image: './assets/server.png',
+                desc: "What started as a spare PC I couldn't bring myself to throw out now runs most of the things I rely on. It hosts my side projects, keeps backups of everything I'd hate to lose, and gives me somewhere to break things without breaking anything that matters.",
+                roleLabel: "What runs on it",
+                role: "Ubuntu Server underneath, Docker for anything I don't want polluting the host, Nginx handling traffic, and a Cloudflare Tunnel so I never had to touch port forwarding. I've rebuilt it three times — the first two taught me why backups exist."
+            },
+            vscode: {
+                name: "My VS Code Setup", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m8 17-5-5 5-5"/><path d="m16 7 5 5-5 5"/><path d="m13.5 4-3 16"/></svg>', tag: "Workflow",
+                image: './assets/vscode.png',
+                desc: "I spend most of my day inside this editor, so I've put an unreasonable amount of time into making it feel right. Nothing flashy — just a setup that stays out of the way and makes it obvious the moment something is off.",
+                roleLabel: "How it's set up",
+                role: "A dark theme that doesn't fight my eyes at 2am, Prettier and ESLint running on save so I stop arguing with myself about formatting, GitLens for the \"who wrote this and why\" moments, and Live Server for quick checks. Plus snippets and keybinds for the things I type a hundred times a day."
+            },
+            networking: {
+                name: "Home Network", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="6" rx="1.5"/><rect x="2" y="15" width="6" height="6" rx="1.5"/><rect x="16" y="15" width="6" height="6" rx="1.5"/><path d="M12 9v3M5 15v-3h14v3"/></svg>', tag: "Personal Build",
+                image: './assets/networking.png',
+                desc: "I got tired of guessing why the wifi was slow, so I stopped guessing. The network is segmented now, everything resolves through my own DNS, and I can finally see what's talking to what.",
+                roleLabel: "How it's wired",
+                role: "Pi-hole handling DNS and ad blocking for the whole house, VLANs keeping the IoT gear away from anything I care about, static leases so devices stop moving around on me, and a WireGuard tunnel for getting back in when I'm not home. Wireshark comes out whenever something looks off."
+            },
+            n8n: {
+                name: "n8n Automations", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="4.5" cy="12" r="2.5"/><circle cx="19.5" cy="6" r="2.5"/><circle cx="19.5" cy="18" r="2.5"/><circle cx="12" cy="12" r="2.5"/><path d="M7 12h2.5M14.5 11l2.8-3.5M14.5 13l2.8 3.5"/></svg>', tag: "Automation",
+                image: './assets/n8n.png',
+                desc: "I kept catching myself doing the same handful of tasks every week — copying form entries somewhere, sending the same follow-up, checking whether a site was still up. n8n turned most of that into flows I set up once and mostly forget about.",
+                roleLabel: "What I've built with it",
+                role: "Self-hosted on the same box as everything else. Flows that push contact form submissions into a sheet and ping me on Telegram, a nightly uptime check that tells me before a client does, and a few that quietly move data between apps. Nothing huge — just enough to get a few hours back each week."
             }
         };
 
@@ -543,6 +637,11 @@
             document.getElementById('modal-tag').textContent = data.tag;
             document.getElementById('modal-desc').textContent = data.desc;
             document.getElementById('modal-role').textContent = data.role;
+            document.getElementById('modal-role-label').textContent = data.roleLabel || 'My Role';
+            document.getElementById('modal-title-bar').textContent = data.name + ' — Project Details';
+            document.getElementById('modal-right').innerHTML = data.image
+                ? '<img class="modal-media" src="' + data.image + '" alt="' + data.name + '">'
+                : '<div class="modal-mark">' + data.icon + '</div>';
             document.getElementById('proj-modal').classList.add('open');
             document.body.classList.add('modal-open');
         }
@@ -553,6 +652,146 @@
         }
 
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+        document.getElementById('proj-modal').addEventListener('click', e => {
+            if (e.target.id === 'proj-modal') closeModal();
+        });
+
+        /* ═══════════════════════════════════════════════════
+           MOTION LAYER
+           ═══════════════════════════════════════════════════ */
+        (function () {
+            'use strict';
+
+            const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+            /* ── Split hero name into characters ───────────── */
+            document.querySelectorAll('[data-split-chars]').forEach(el => {
+                let i = 0;
+                el.innerHTML = el.innerHTML.split(/(<br\s*\/?>)/i).map(part =>
+                    /^<br/i.test(part)
+                        ? part
+                        : part.replace(/\S/g, c =>
+                            `<span class="ch" style="animation-delay:${(0.35 + i++ * 0.035).toFixed(3)}s">${c}</span>`)
+                ).join('');
+            });
+
+            /* ── Split section titles into words ───────────── */
+            document.querySelectorAll('[data-split-words]').forEach(el => {
+                el.innerHTML = el.textContent.trim().split(/\s+/).map((w, i) =>
+                    `<span class="word" style="transition-delay:${(0.06 + i * 0.07).toFixed(2)}s">${w}</span>`
+                ).join(' ');
+            });
+
+            /* ── Scroll progress, sticky nav, back-to-top ──── */
+            const bar = document.getElementById('scroll-progress');
+            const navEl = document.querySelector('nav');
+            const toTop = document.getElementById('to-top');
+            let queued = false;
+
+            function onScroll() {
+                const max = document.documentElement.scrollHeight - innerHeight;
+                const y = scrollY;
+                bar.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+                navEl.classList.toggle('stuck', y > 12);
+                toTop.classList.toggle('show', y > 700);
+                queued = false;
+            }
+
+            addEventListener('scroll', () => {
+                if (!queued) { queued = true; requestAnimationFrame(onScroll); }
+            }, { passive: true });
+            onScroll();
+
+            toTop.addEventListener('click', () =>
+                scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }));
+
+            /* ── Nav scroll-spy ────────────────────────────── */
+            const links = new Map();
+            document.querySelectorAll('.nav-links a[href^="#"]').forEach(a =>
+                links.set(a.getAttribute('href').slice(1), a));
+
+            const spy = new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    if (!e.isIntersecting) return;
+                    const link = links.get(e.target.id);
+                    if (!link) return;
+                    links.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                });
+            }, { rootMargin: '-45% 0px -50% 0px' });
+
+            links.forEach((_, id) => {
+                const sec = document.getElementById(id);
+                if (sec) spy.observe(sec);
+            });
+
+            /* ── Animated stat counters ────────────────────── */
+            const counters = new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    if (!e.isIntersecting) return;
+                    counters.unobserve(e.target);
+                    const el = e.target;
+                    const target = parseFloat(el.dataset.count);
+                    const suffix = el.dataset.suffix || '';
+                    if (reduced) { el.textContent = target + suffix; return; }
+                    const t0 = performance.now(), dur = 1500;
+                    requestAnimationFrame(function step(now) {
+                        const p = Math.min((now - t0) / dur, 1);
+                        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suffix;
+                        if (p < 1) requestAnimationFrame(step);
+                    });
+                });
+            }, { threshold: 0.6 });
+            document.querySelectorAll('[data-count]').forEach(el => counters.observe(el));
+
+            /* ── Cursor-follow spotlight on project cards ──── */
+            document.querySelectorAll('.project-card').forEach(card => {
+                card.addEventListener('pointermove', e => {
+                    const r = card.getBoundingClientRect();
+                    card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+                    card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+                });
+            });
+
+            /* ── Sheen that follows the cursor across buttons ─ */
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.addEventListener('pointermove', e => {
+                    const r = btn.getBoundingClientRect();
+                    btn.style.setProperty('--bx', (e.clientX - r.left) + 'px');
+                    btn.style.setProperty('--by', (e.clientY - r.top) + 'px');
+                });
+            });
+
+            if (finePointer && !reduced) {
+                /* ── 3D tilt on the hero portrait ──────────── */
+                const wrap = document.querySelector('.hero-img-wrap');
+                const frame = document.querySelector('.hero-img-frame');
+                if (wrap && frame) {
+                    wrap.addEventListener('pointermove', e => {
+                        const r = frame.getBoundingClientRect();
+                        const px = (e.clientX - r.left) / r.width - .5;
+                        const py = (e.clientY - r.top) / r.height - .5;
+                        frame.style.transform =
+                            `perspective(1100px) rotateY(${px * 10}deg) rotateX(${-py * 10}deg) scale(1.02)`;
+                    });
+                    wrap.addEventListener('pointerleave', () => { frame.style.transform = ''; });
+                }
+
+                /* ── Magnetic hero buttons ─────────────────── */
+                document.querySelectorAll('.hero-actions .btn').forEach(btn => {
+                    btn.addEventListener('pointermove', e => {
+                        const r = btn.getBoundingClientRect();
+                        const x = e.clientX - r.left - r.width / 2;
+                        const y = e.clientY - r.top - r.height / 2;
+                        btn.style.transform = `translate(${x * .2}px, ${y * .28}px)`;
+                    });
+                    btn.addEventListener('pointerleave', () => { btn.style.transform = ''; });
+                });
+
+            }
+        })();
+
     </script>
 </body>
 
