@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
     <meta charset="UTF-8">
@@ -10,6 +10,15 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap"
         rel="stylesheet">
+    <script>
+        // Runs before paint: dark is the default, a stored choice wins.
+        try {
+            if (localStorage.getItem('ft_theme') === 'light') {
+                document.documentElement.dataset.theme = '';
+            }
+        } catch (e) { }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
     <link rel="stylesheet" href="style.css">
     <noscript>
         <style>
@@ -486,14 +495,6 @@
                         <span class="hud-corner bl"></span>
                         <span class="hud-corner br"></span>
                         <span class="hud-scan"></span>
-                        <span class="hud-reticle">
-                            <i class="r-ring r1"></i>
-                            <i class="r-ring r2"></i>
-                            <i class="r-ring r3"></i>
-                            <i class="r-ping"></i>
-                            <i class="r-cross"></i>
-                            <i class="r-dot"></i>
-                        </span>
                         <span class="hud-tag t1">SUBJECT&nbsp;/&nbsp;F. TRIPOLE</span>
                         <span class="hud-tag t2">LAT 10.5199&deg;N &nbsp; LNG 124.0272&deg;E</span>
                         <span class="hud-tag t3">SIG&nbsp;<b>LOCKED</b></span>
@@ -567,54 +568,68 @@
         </div>
     </div>
 
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtrD5bCZHCrm9AV2QzqTdJWbWh3UUpbWA&callback=initMap"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 
     <script>
-        function initMap() {
-            const origin = { lat: 10.5199, lng: 124.0272 };
+        /* ── Location feed (Leaflet — no API key, no static fallback) ── */
+        (function () {
+            const mapEl = document.getElementById('map');
+            if (!mapEl || typeof L === 'undefined') return;
 
-            const map = new google.maps.Map(document.getElementById("map"), {
-                center: origin,
+            const ORIGIN = [10.5199, 124.0272];
+
+            const map = L.map(mapEl, {
+                center: ORIGIN,
                 zoom: 16,
-                mapTypeId: google.maps.MapTypeId.HYBRID,
-                tilt: 0,
-                backgroundColor: '#04070a',
-                mapTypeControl: false,
-                streetViewControl: false,
-                fullscreenControl: false
+                zoomControl: false,
+                scrollWheelZoom: false,   // don't hijack page scrolling
+                attributionControl: true
             });
 
-            // The tactical reticle is drawn in the HUD above the map so the
-            // map's colour filter does not wash it out. This overlay keeps it
-            // pinned to the coordinates through pan and zoom.
-            const reticle = document.querySelector('.hud-reticle');
-            const pin = new google.maps.OverlayView();
-            pin.onAdd = function () { };
-            pin.onRemove = function () { };
-            pin.draw = function () {
-                const proj = this.getProjection();
-                if (!proj || !reticle) return;
-                const pt = proj.fromLatLngToContainerPixel(new google.maps.LatLng(origin.lat, origin.lng));
-                if (!pt) return;
-                reticle.style.left = pt.x + 'px';
-                reticle.style.top = pt.y + 'px';
-            };
-            pin.setMap(map);
+            // Satellite base with dark place labels on top.
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 19,
+                attribution: 'Imagery &copy; Esri, Maxar, Earthstar Geographics'
+            }).addTo(map);
+
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a>'
+            }).addTo(map);
+
+            // Reticle rides on the marker, so it stays locked to the coordinates
+            // and sits outside the tile filter that tints the imagery.
+            const reticle = L.divIcon({
+                className: 'reticle-icon',
+                html: '<span class="hud-reticle">' +
+                    '<i class="r-ring r1"></i><i class="r-ring r2"></i><i class="r-ring r3"></i>' +
+                    '<i class="r-ping"></i><i class="r-cross"></i><i class="r-dot"></i></span>',
+                iconSize: [220, 220],
+                iconAnchor: [110, 110]
+            });
+            L.marker(ORIGIN, { icon: reticle, interactive: false, keyboard: false }).addTo(map);
+
+            // Wheel zoom only after a deliberate click, so the page still scrolls past.
+            map.once('click', () => map.scrollWheelZoom.enable());
 
             const zoomOut = document.getElementById('mc-zoom');
             if (zoomOut) {
-                map.addListener('zoom_changed', () => { zoomOut.textContent = map.getZoom(); });
+                const sync = () => { zoomOut.textContent = map.getZoom(); };
+                map.on('zoomend', sync);
+                sync();
             }
 
             const clock = document.getElementById('mc-clock');
-            const pad = n => String(n).padStart(2, '0');
-            function tick() {
-                const d = new Date();
-                clock.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+            if (clock) {
+                const pad = n => String(n).padStart(2, '0');
+                const tick = () => {
+                    const d = new Date();
+                    clock.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+                };
+                tick();
+                setInterval(tick, 1000);
             }
-            tick();
-            setInterval(tick, 1000);
-        }
+        })();
 
         (function () {
             const canvas = document.getElementById('footer-canvas');

@@ -1,510 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact | Franklin Tripole</title>
+    <meta name="description"
+        content="Get in touch with Franklin Tripole — web developer in Danao City, Philippines.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-
-    <style>
-        /* =========================================================
-           VARIABLES (mirrors index.html)
-        ========================================================= */
-        :root {
-            --primary: #00ff41;
-            --primary-dim: rgba(0, 255, 65, 0.12);
-            --primary-glow: rgba(0, 255, 65, 0.25);
-            --bg-main: #080c08;
-            --bg-alt: #0f130f;
-            --bg-card: #111611;
-            --text-main: #e8f0e8;
-            --text-muted: #667a66;
-            --text-dim: #3d4f3d;
-            --border: #1e2a1e;
-            --border-bright: #2d3f2d;
-            --nav-bg: rgba(8, 12, 8, 0.92);
-            --error: #ff4444;
-            --ease: cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        [data-theme="light"] {
-            --primary: #006b1c;
-            --primary-dim: rgba(0, 107, 28, 0.08);
-            --primary-glow: rgba(0, 107, 28, 0.18);
-            --bg-main: #f0f4f0;
-            --bg-alt: #e4ebe4;
-            --bg-card: #ffffff;
-            --text-main: #0d1a0d;
-            --text-muted: #4a6b4a;
-            --text-dim: #8aab8a;
-            --border: #cddacd;
-            --border-bright: #b0c8b0;
-            --nav-bg: rgba(240, 244, 240, 0.92);
-            --error: #cc2222;
-        }
-
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: 'Syne', sans-serif;
-            background: var(--bg-main);
-            color: var(--text-main);
-            line-height: 1.6;
-            min-height: 100svh;
-            transition: background 0.35s ease, color 0.35s ease;
-            overflow-x: hidden;
-        }
-
-        /* Scanline */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: repeating-linear-gradient(
-                0deg, transparent, transparent 2px,
-                rgba(0,255,65,0.012) 2px, rgba(0,255,65,0.012) 4px
-            );
-            pointer-events: none;
-            z-index: 9999;
-        }
-        [data-theme="light"] body::before { display: none; }
-
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: var(--bg-main); }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 2px; }
-
-        /* =========================================================
-           MATRIX CANVAS
-        ========================================================= */
-        #matrix-canvas {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.6s ease;
-        }
-
-        #matrix-canvas.active {
-            display: block;
-            opacity: 0.25;
-        }
-
-        /* =========================================================
-           NAV
-        ========================================================= */
-        nav {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 1000;
-            background: var(--nav-bg);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border-bottom: 1px solid var(--border);
-            transition: background 0.35s ease, border-color 0.35s ease;
-        }
-
-        .nav-inner {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 min(5%, 40px);
-            height: 60px;
-            width: min(90%, 1080px);
-            margin: 0 auto;
-        }
-
-        .logo {
-            font-family: 'Space Mono', monospace;
-            font-size: 1.1rem;
-            color: var(--primary);
-            text-decoration: none;
-            letter-spacing: 2px;
-            font-weight: 700;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            padding: 6px 12px;
-            border-radius: 4px;
-            transition: color 0.25s, background 0.25s;
-        }
-
-        .nav-links a:hover { color: var(--primary); background: var(--primary-dim); }
-
-        .nav-links .nav-cta {
-            color: var(--primary);
-            border: 1px solid var(--primary);
-            background: var(--primary-dim);
-        }
-
-        #theme-toggle {
-            background: none;
-            border: 1px solid var(--border-bright);
-            cursor: pointer;
-            font-size: 1rem;
-            width: 34px; height: 34px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: border-color 0.25s, transform 0.25s;
-            flex-shrink: 0;
-        }
-
-        #theme-toggle:hover { border-color: var(--primary); transform: scale(1.05); }
-
-        .hamburger {
-            display: none;
-            background: none;
-            border: 1px solid var(--border-bright);
-            cursor: pointer;
-            padding: 7px 9px;
-            border-radius: 4px;
-            flex-direction: column;
-            gap: 4px;
-            transition: border-color 0.25s;
-        }
-
-        .hamburger span {
-            display: block;
-            width: 18px; height: 2px;
-            background: var(--text-main);
-            border-radius: 1px;
-            transition: all 0.3s ease;
-        }
-
-        .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
-        .hamburger.open span:nth-child(2) { opacity: 0; }
-        .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
-
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 60px; left: 0; right: 0;
-            background: var(--nav-bg);
-            backdrop-filter: blur(14px);
-            border-bottom: 1px solid var(--border);
-            padding: 20px min(5%, 40px);
-            flex-direction: column;
-            gap: 4px;
-            z-index: 999;
-        }
-
-        .mobile-menu.open { display: flex; }
-
-        .mobile-menu a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            padding: 12px 10px;
-            border-radius: 4px;
-            border-bottom: 1px solid var(--border);
-            transition: color 0.25s, background 0.25s;
-        }
-
-        .mobile-menu a:last-child { border-bottom: none; }
-        .mobile-menu a:hover { color: var(--primary); background: var(--primary-dim); }
-        .mobile-menu .nav-cta { color: var(--primary); border: 1px solid var(--primary); text-align: center; margin-top: 8px; }
-
-        /* =========================================================
-           MAIN TERMINAL LAYOUT
-        ========================================================= */
-        main {
-            position: relative;
-            z-index: 1;
-            min-height: 100svh;
-            padding: 80px 0 60px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .container {
-            width: min(90%, 1080px);
-            margin: 0 auto;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Page header */
-        .page-header {
-            padding: clamp(40px, 6vw, 70px) 0 0;
-            margin-bottom: 32px;
-        }
-
-        .section-label {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.65rem;
-            letter-spacing: 4px;
-            color: var(--primary);
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-label::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-            max-width: 60px;
-        }
-
-        h1.page-title {
-            font-size: clamp(1.8rem, 5vw, 3rem);
-            font-weight: 800;
-            letter-spacing: -1px;
-            color: var(--text-main);
-            margin-bottom: 8px;
-        }
-
-        .page-sub {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            letter-spacing: 1px;
-        }
-
-        /* =========================================================
-           TERMINAL WINDOW
-        ========================================================= */
-        .terminal-window {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            overflow: hidden;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            cursor: text;
-            transition: border-color 0.3s ease;
-        }
-
-        .terminal-window:focus-within { border-color: var(--border-bright); }
-
-        /* Titlebar */
-        .term-bar {
-            background: var(--bg-alt);
-            border-bottom: 1px solid var(--border);
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-shrink: 0;
-        }
-
-        .term-dots {
-            display: flex;
-            gap: 6px;
-        }
-
-        .term-dots span {
-            width: 10px; height: 10px;
-            border-radius: 50%;
-            background: var(--border-bright);
-        }
-
-        .term-title {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.68rem;
-            color: var(--text-dim);
-            letter-spacing: 1px;
-            margin-left: 4px;
-        }
-
-        .term-hint {
-            margin-left: auto;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.6rem;
-            color: var(--text-dim);
-            letter-spacing: 1px;
-        }
-
-        /* Terminal body */
-        .term-body {
-            padding: clamp(16px, 3vw, 28px);
-            flex: 1;
-            overflow-y: auto;
-            font-family: 'Space Mono', monospace;
-            font-size: clamp(0.75rem, 1.8vw, 0.88rem);
-            line-height: 1.7;
-        }
-
-        /* Boot header */
-        .boot-header {
-            color: var(--text-dim);
-            margin-bottom: 24px;
-            line-height: 1.6;
-            font-size: 0.78rem;
-        }
-
-        .boot-header .boot-accent { color: var(--primary); }
-        .boot-header a { color: var(--primary); text-decoration: none; }
-        .boot-header a:hover { text-decoration: underline; }
-
-        /* History lines */
-        .hist-cmd {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin: 4px 0;
-            flex-wrap: wrap;
-        }
-
-        .prompt {
-            color: var(--text-muted);
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .prompt .path { color: var(--primary); }
-
-        .cmd-text { color: var(--primary); word-break: break-all; }
-
-        .hist-output {
-            margin: 4px 0 20px 0;
-            color: var(--text-muted);
-            line-height: 1.75;
-        }
-
-        .hist-output a {
-            color: var(--primary);
-            text-decoration: none;
-            transition: text-shadow 0.2s;
-        }
-
-        .hist-output a:hover { text-decoration: underline; text-shadow: 0 0 8px var(--primary-glow); }
-
-        .hist-output.error { color: var(--error); }
-        .hist-output .hl { color: var(--text-main); }
-        .hist-output .dim { color: var(--text-dim); }
-
-        /* Contact info layout */
-        .contact-grid {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 4px 20px;
-            margin: 8px 0 4px;
-        }
-
-        .c-key { color: var(--text-dim); }
-        .c-val { color: var(--text-main); }
-        .c-val a { color: var(--primary); text-decoration: none; }
-        .c-val a:hover { text-decoration: underline; }
-
-        /* Input row */
-        .input-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 4px;
-            flex-wrap: nowrap;
-        }
-
-        .input-row .prompt { flex-shrink: 0; }
-
-        #cmd-input {
-            background: transparent;
-            border: none;
-            color: var(--primary);
-            font-family: 'Space Mono', monospace;
-            font-size: clamp(0.75rem, 1.8vw, 0.88rem);
-            outline: none;
-            flex: 1;
-            min-width: 60px;
-            caret-color: var(--primary);
-        }
-
-        /* Cursor blink */
-        .cursor-blink {
-            display: inline-block;
-            width: 7px;
-            height: 1em;
-            background: var(--primary);
-            vertical-align: text-bottom;
-            animation: blink 1.1s step-end infinite;
-        }
-
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-        /* Matrix overlay text */
-        .matrix-msg {
-            color: var(--primary);
-            font-size: 0.88rem;
-            line-height: 1.8;
-        }
-
-        /* =========================================================
-           RESPONSIVE
-        ========================================================= */
-        #theme-toggle-mob {
-            display: none;
-            background: none;
-            border: 1px solid var(--border-bright);
-            cursor: pointer;
-            font-size: 1rem;
-            width: 34px;
-            height: 34px;
-            border-radius: 4px;
-            align-items: center;
-            justify-content: center;
-        }
-
-        @media (max-width: 800px) {
-            .nav-links { display: none; }
-            .hamburger { display: flex; }
-            #theme-toggle-mob { display: flex; }
-            .term-hint { display: none; }
-        }
-
-        @media (max-width: 480px) {
-            .contact-grid { grid-template-columns: 1fr; gap: 2px; }
-            .c-key { color: var(--text-dim); font-size: 0.7rem; }
-        }
-    </style>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap"
+        rel="stylesheet">
+    <script>
+        // Runs before paint: dark is the default, a stored choice wins.
+        try {
+            if (localStorage.getItem('ft_theme') === 'light') {
+                document.documentElement.dataset.theme = '';
+            }
+        } catch (e) { }
+    </script>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <canvas id="matrix-canvas"></canvas>
 
-    <!-- ============================================================
-         NAV
-    ============================================================ -->
     <nav>
         <div class="nav-inner">
-            <a href="index.html" class="logo">FT</a>
+            <a href="index.html" class="logo">Franklin Tripole</a>
             <ul class="nav-links">
                 <li><a href="index.html#home">Home</a></li>
                 <li><a href="index.html#about">About</a></li>
                 <li><a href="index.html#experience">Experience</a></li>
                 <li><a href="index.html#projects">Work</a></li>
                 <li><a href="contact.html" class="nav-cta">Contact</a></li>
-                <li><button id="theme-toggle" title="Toggle theme">☀️</button></li>
+                <li><button id="theme-toggle" type="button" title="Toggle theme" aria-label="Toggle colour theme"><svg
+                            class="ico-sun" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="12" cy="12" r="4" />
+                            <path
+                                d="M12 2.8v2.4M12 18.8v2.4M21.2 12h-2.4M5.2 12H2.8M18.5 5.5l-1.7 1.7M7.2 16.8l-1.7 1.7M18.5 18.5l-1.7-1.7M7.2 7.2L5.5 5.5" />
+                        </svg><svg class="ico-moon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M20.6 13.4A8.7 8.7 0 0 1 10.6 3.4a8.7 8.7 0 1 0 10 10Z" />
+                        </svg></button></li>
             </ul>
-            <div style="display:flex;align-items:center;gap:10px;">
-                <button id="theme-toggle-mob">☀️</button>
+            <div style="display:flex;align-items:center;gap:8px;">
+                <button id="theme-toggle-mob" type="button" title="Toggle theme" aria-label="Toggle colour theme"><svg
+                        class="ico-sun" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="12" r="4" />
+                        <path
+                            d="M12 2.8v2.4M12 18.8v2.4M21.2 12h-2.4M5.2 12H2.8M18.5 5.5l-1.7 1.7M7.2 16.8l-1.7 1.7M18.5 18.5l-1.7-1.7M7.2 7.2L5.5 5.5" />
+                    </svg><svg class="ico-moon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20.6 13.4A8.7 8.7 0 0 1 10.6 3.4a8.7 8.7 0 1 0 10 10Z" />
+                    </svg></button>
                 <button class="hamburger" id="hamburger" aria-label="Open menu">
                     <span></span><span></span><span></span>
                 </button>
@@ -520,33 +69,47 @@
         <a href="contact.html" class="nav-cta">Contact →</a>
     </div>
 
-    <!-- ============================================================
-         MAIN
-    ============================================================ -->
-    <main onclick="document.getElementById('cmd-input').focus()">
+    <main class="contact-main">
+        <svg class="cables" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <path class="wire" d="M-60 140 C 260 250 620 60 1500 200" />
+            <path class="wire" d="M-60 330 C 380 460 880 250 1500 380" />
+            <path class="wire" d="M-60 560 C 320 690 820 480 1500 610" />
+            <path class="wire" d="M-60 780 C 300 880 760 700 1500 830" />
+            <path class="rail" d="M-60 220 H 240 V 470 H 640 V 700 H 1500" />
+            <path class="rail" d="M1500 120 H 1140 V 360 H 820 V 590 H -60" />
+            <path class="flow d1" d="M-60 220 H 240 V 470 H 640 V 700 H 1500" />
+            <path class="flow d2" d="M-60 330 C 380 460 880 250 1500 380" />
+            <path class="flow d3" d="M1500 120 H 1140 V 360 H 820 V 590 H -60" />
+            <path class="flow" d="M-60 560 C 320 690 820 480 1500 610" />
+            <circle class="node" cx="240" cy="220" r="3" />
+            <circle class="node-ring" cx="240" cy="220" r="7" />
+            <circle class="node" cx="640" cy="470" r="3" />
+            <circle class="node-ring" cx="640" cy="470" r="7" />
+            <circle class="node" cx="1140" cy="360" r="3" />
+            <circle class="node-ring" cx="1140" cy="360" r="7" />
+            <circle class="node" cx="820" cy="590" r="3" />
+            <circle class="node-ring" cx="820" cy="590" r="7" />
+        </svg>
+
         <div class="container">
+            <div class="section-eyebrow">05 / Contact</div>
+            <h2 class="section-title">Get In Touch</h2>
+            <p class="contact-lead">
+                Open to freelance work and full-time roles. Use the terminal below — type <code>help</code> for the
+                available commands — or take the direct route underneath it.
+            </p>
 
-            <div class="page-header">
-                <div class="section-label">04 / Contact</div>
-                <h1 class="page-title">Get In Touch</h1>
-                
-            </div>
-
-            <div class="terminal-window" id="terminal-window">
+            <div class="term-window" id="terminal-window">
                 <div class="term-bar">
-                    <div class="term-dots">
-                        <span></span><span></span><span></span>
-                    </div>
+                    <div class="term-dots"><span></span><span></span><span></span></div>
                     <span class="term-title">PowerShell &nbsp;—&nbsp; kraken@portfolio</span>
-                  
                 </div>
                 <div class="term-body" id="term-body">
-
                     <div class="boot-header" id="boot-header">
                         Windows PowerShell<br>
                         Copyright (C) Microsoft Corporation. All rights reserved.<br><br>
                         Install the latest PowerShell for new features and improvements!
-                        <a href="#" target="_blank">https://aka.ms/PSWindows</a><br><br>
+                        <a href="https://aka.ms/PSWindows" target="_blank" rel="noopener">https://aka.ms/PSWindows</a><br><br>
                         <span class="boot-accent">Type 'help' to see available commands.</span>
                     </div>
 
@@ -554,37 +117,117 @@
 
                     <div class="input-row" id="input-row" style="display:none;">
                         <span class="prompt"><span class="path">PS</span> C:\Users\kraken&gt;</span>
-                        <input type="text" id="cmd-input" autocomplete="off" spellcheck="false" autofocus aria-label="Terminal input">
-                        <span class="cursor-blink" id="fake-cursor" style="display:none;"></span>
+                        <input type="text" id="cmd-input" autocomplete="off" spellcheck="false"
+                            aria-label="Terminal input">
                     </div>
-
                 </div>
             </div>
 
+            <div class="reach-grid">
+                <a class="reach-card" href="mailto:tripolefranklin67@gmail.com">
+                    <span class="reach-icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="2" y="4" width="20" height="16" rx="2" />
+                            <path d="m22 7-10 6L2 7" />
+                        </svg>
+                    </span>
+                    <span>
+                        <span class="reach-label">Email</span>
+                        <span class="reach-value">tripolefranklin67@gmail.com</span>
+                    </span>
+                </a>
+                <a class="reach-card" href="https://github.com/syskraken" target="_blank" rel="noopener">
+                    <span class="reach-icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path
+                                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-.9-2.6c3-.3 6.2-1.5 6.2-6.7A5.2 5.2 0 0 0 19.9 4a4.9 4.9 0 0 0-.1-3.6s-1.1-.3-3.7 1.4a12.6 12.6 0 0 0-6.6 0C6.9.1 5.8.4 5.8.4A4.9 4.9 0 0 0 5.7 4a5.2 5.2 0 0 0-1.4 3.6c0 5.2 3.2 6.4 6.2 6.7a3.4 3.4 0 0 0-.9 2.6V21" />
+                        </svg>
+                    </span>
+                    <span>
+                        <span class="reach-label">GitHub</span>
+                        <span class="reach-value">github.com/syskraken</span>
+                    </span>
+                </a>
+                <div class="reach-card">
+                    <span class="reach-icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg>
+                    </span>
+                    <span>
+                        <span class="reach-label">Location</span>
+                        <span class="reach-value">Danao City, Cebu, Philippines</span>
+                    </span>
+                </div>
+                <div class="reach-card">
+                    <span class="reach-icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M12 7v5l3 2" />
+                        </svg>
+                    </span>
+                    <span>
+                        <span class="reach-label">Status</span>
+                        <span class="reach-value">Open to opportunities</span>
+                    </span>
+                </div>
+            </div>
         </div>
     </main>
 
-    <!-- ============================================================
-         SCRIPTS
-    ============================================================ -->
+    <div class="patch-strip" aria-hidden="true">
+        <i class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i
+            class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i
+            class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i
+            class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i
+            class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i
+            class="live"></i><i class="live"></i><i></i><i class="live"></i><i class="live"></i><i></i><i
+            class="live"></i><i class="live"></i><i></i><i class="live"></i>
+        <span class="patch-label">UPLINK / ACTIVE</span>
+    </div>
+
+    <footer>
+        <div class="footer-brand">
+            <a href="index.html" class="footer-logo">Franklin Tripole</a>
+            <p class="footer-text">Building high-performance digital experiences from Danao City, Philippines.</p>
+        </div>
+        <div class="footer-meta">
+            <a href="mailto:tripolefranklin67@gmail.com">tripolefranklin67@gmail.com</a>
+            <div class="footer-links">
+                <a href="https://github.com/syskraken" target="_blank" rel="noopener" class="soc" aria-label="GitHub">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.75.41-1.27.74-1.56-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.8 1.19 1.83 1.19 3.09 0 4.41-2.7 5.39-5.26 5.67.42.36.8 1.08.8 2.18v3.23c0 .31.21.68.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z" />
+                    </svg>
+                </a>
+                <a href="mailto:tripolefranklin67@gmail.com" class="soc" aria-label="Email">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="2" />
+                        <path d="m22 7-10 6L2 7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <div class="footer-copy">© <span id="year">2026</span> Franklin Tripole. All rights reserved.</div>
+    </footer>
+
     <script>
-        /* ---- Theme ---- */
+        /* ── Theme (same model as the home page) ─────────────── */
         const root = document.documentElement;
-        const toggleD = document.getElementById('theme-toggle');
-        const toggleM = document.getElementById('theme-toggle-mob');
+        const td = document.getElementById('theme-toggle');
+        const tm = document.getElementById('theme-toggle-mob');
 
-        function setTheme(light) {
-            root.dataset.theme = light ? 'light' : '';
-            const icon = light ? '🌙' : '☀️';
-            toggleD.textContent = icon;
-            toggleM.textContent = icon;
-            localStorage.setItem('ft_theme', light ? 'light' : 'dark');
+        function setTheme(dark) {
+            root.dataset.theme = dark ? 'dark' : '';
+            [td, tm].forEach(b => b.setAttribute('aria-pressed', String(dark)));
+            localStorage.setItem('ft_theme', dark ? 'dark' : 'light');
         }
+        setTheme(localStorage.getItem('ft_theme') !== 'light');
+        [td, tm].forEach(b => b.addEventListener('click', () => setTheme(root.dataset.theme !== 'dark')));
 
-        setTheme(localStorage.getItem('ft_theme') === 'light');
-        [toggleD, toggleM].forEach(b => b.addEventListener('click', () => setTheme(root.dataset.theme !== 'light')));
-
-        /* ---- Hamburger ---- */
+        /* ── Mobile menu ─────────────────────────────────────── */
         const hamburger = document.getElementById('hamburger');
         const mobileMenu = document.getElementById('mobile-menu');
         hamburger.addEventListener('click', () => {
@@ -596,84 +239,51 @@
             mobileMenu.classList.remove('open');
         }));
 
-        /* ---- Matrix ---- */
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
-        let matrixRaf = null;
-        let drops = [];
+        document.getElementById('year').textContent = new Date().getFullYear();
 
-        function startMatrix() {
-            root.dataset.theme = '';
-            setTheme(false);
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%"\'#&_(),.;:?!\\|{}<>[]^~';
-            const fontSize = 14;
-            const cols = Math.floor(canvas.width / fontSize);
-            drops = Array(cols).fill(1);
-            canvas.classList.add('active');
-
-            function draw() {
-                ctx.fillStyle = 'rgba(8,12,8,0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = '#00ff41';
-                ctx.font = `${fontSize}px monospace`;
-                drops.forEach((y, i) => {
-                    const ch = chars[Math.floor(Math.random() * chars.length)];
-                    ctx.fillText(ch, i * fontSize, y * fontSize);
-                    if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                    drops[i]++;
-                });
-                matrixRaf = requestAnimationFrame(draw);
-            }
-            if (matrixRaf) cancelAnimationFrame(matrixRaf);
-            draw();
-        }
-
-        function stopMatrix() {
-            if (matrixRaf) cancelAnimationFrame(matrixRaf);
-            canvas.classList.remove('active');
-            setTimeout(() => { canvas.style.display = 'none'; canvas.style.display = ''; }, 600);
-        }
-
-        /* ---- Terminal ---- */
+        /* ── Terminal ────────────────────────────────────────── */
         const history = document.getElementById('terminal-history');
         const inputRow = document.getElementById('input-row');
         const cmdInput = document.getElementById('cmd-input');
         const termBody = document.getElementById('term-body');
+        const PROMPT = '<span class="prompt"><span class="path">PS</span> C:\\Users\\kraken&gt;</span>';
 
         const contactBlock = `
-            <div class="dim" style="margin-bottom:10px;">&gt; initiating communication protocol... <span style="color:var(--primary);">[OK]</span></div>
-            <div class="contact-grid">
+            <div class="dim" style="margin-bottom:10px;">&gt; initiating communication protocol... <span class="term-acc">[OK]</span></div>
+            <div class="term-grid">
                 <span class="c-key">[Email]</span>
                 <span class="c-val"><a href="mailto:tripolefranklin67@gmail.com">tripolefranklin67@gmail.com</a></span>
                 <span class="c-key">[GitHub]</span>
-                <span class="c-val"><a href="https://github.com/syskraken" target="_blank">syskraken.github.io</a></span>
+                <span class="c-val"><a href="https://github.com/syskraken" target="_blank" rel="noopener">github.com/syskraken</a></span>
                 <span class="c-key">[Location]</span>
                 <span class="c-val hl">Danao City, Philippines</span>
                 <span class="c-key">[Status]</span>
-                <span class="c-val" style="color:var(--primary);">Open to opportunities</span>
-            </div>
-        `;
+                <span class="c-val term-acc">Open to opportunities</span>
+            </div>`;
 
         const commands = {
             help: `
 <span class="hl">Available commands:</span><br><br>
-<span style="color:var(--primary);">whoami</span>                   — Display current user<br>
-<span style="color:var(--primary);">email</span>                    — Get email address<br>
-<span style="color:var(--primary);">github</span>                   — Get GitHub profile link<br>
-<span style="color:var(--primary);">location</span>                 — Display base of operations<br>
-<span style="color:var(--primary);">status</span>                   — Availability status<br>
-<span style="color:var(--primary);">ipconfig</span>                 — Display network configuration<br>
-<span style="color:var(--primary);">ls</span>                       — List directory contents<br>
-<span style="color:var(--primary);">clear</span>                    — Clear terminal window<br>
-<span style="color:var(--primary);">matrix</span>                   — ???<br>
-<span style="color:var(--primary);">./get_contact_info.ps1</span>   — Run the full contact script<br>`,
-            whoami: `<span class="hl">kraken</span><br>Franklin Tripole<br>Developer`,
+<span class="term-acc">whoami</span>                   — Display current user<br>
+<span class="term-acc">email</span>                    — Get email address<br>
+<span class="term-acc">github</span>                   — Get GitHub profile link<br>
+<span class="term-acc">location</span>                 — Display base of operations<br>
+<span class="term-acc">status</span>                   — Availability status<br>
+<span class="term-acc">stack</span>                    — Primary tooling<br>
+<span class="term-acc">ipconfig</span>                 — Display network configuration<br>
+<span class="term-acc">ls</span>                       — List directory contents<br>
+<span class="term-acc">clear</span>                    — Clear terminal window<br>
+<span class="term-acc">matrix</span>                   — ???<br>
+<span class="term-acc">./get_contact_info.ps1</span>   — Run the full contact script<br>`,
+            whoami: `<span class="hl">kraken</span><br>Franklin Tripole<br>Web Developer — Danao City, Philippines`,
             email: `<a href="mailto:tripolefranklin67@gmail.com">tripolefranklin67@gmail.com</a>`,
-            github: `<a href="https://syskraken.github.io/" target="_blank">syskraken.github.io</a>`,
+            github: `<a href="https://github.com/syskraken" target="_blank" rel="noopener">github.com/syskraken</a>`,
             location: `<span class="hl">Danao City</span>, Central Visayas, Philippines`,
-            status: `<span style="color:var(--primary);">●</span> <span class="hl">Open to work</span> — Available for freelance &amp; full-time opportunities.`,
+            status: `<span class="term-acc">●</span> <span class="hl">Open to work</span> — available for freelance and full-time roles.`,
+            stack: `
+<span class="hl">Front end</span>&nbsp;&nbsp;&nbsp;&nbsp;JavaScript, HTML, CSS, Webflow, Framer<br>
+<span class="hl">Back end</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Node, Python, MySQL, Supabase, Firebase<br>
+<span class="hl">Infra</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Linux, Docker, Nginx, n8n`,
             './get_contact_info.ps1': contactBlock,
             ipconfig: `
 Windows IP Configuration<br><br>
@@ -687,36 +297,52 @@ Mode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LastWriteTime&nb
 <span class="dim">----&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-------------&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;----</span><br>
 d----- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3/29/2026 03:44 AM&nbsp;&nbsp;&nbsp;All Safe Database<br>
 d----- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3/26/2026 11:20 PM&nbsp;&nbsp;&nbsp;captive-portal-redesign<br>
--a---- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3/28/2026 08:00 AM&nbsp;&nbsp;&nbsp;<span style="color:var(--primary);">get_contact_info.ps1</span><br>`
+-a---- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3/28/2026 08:00 AM&nbsp;&nbsp;&nbsp;<span class="term-acc">get_contact_info.ps1</span><br>`
         };
 
-        function scrollBottom() {
-            termBody.scrollTop = termBody.scrollHeight;
-        }
+        function scrollBottom() { termBody.scrollTop = termBody.scrollHeight; }
 
         function printCmd(cmd) {
             const el = document.createElement('div');
             el.className = 'hist-cmd';
-            el.innerHTML = `<span class="prompt"><span class="path">PS</span> C:\\Users\\kraken&gt;</span><span class="cmd-text">${cmd}</span>`;
+            el.innerHTML = PROMPT + '<span class="cmd-text"></span>';
+            el.querySelector('.cmd-text').textContent = cmd;
             history.appendChild(el);
         }
 
-        function printOutput(html, isError = false) {
+        function printOutput(html) {
             const el = document.createElement('div');
-            el.className = 'hist-output' + (isError ? ' error' : '');
+            el.className = 'hist-output';
             el.innerHTML = html;
             history.appendChild(el);
             scrollBottom();
         }
 
-        cmdInput.addEventListener('keydown', function(e) {
+        function printError(raw) {
+            const el = document.createElement('div');
+            el.className = 'hist-output term-err';
+            const name = document.createElement('span');
+            name.textContent = "'" + raw + "'";
+            el.appendChild(name);
+            el.append(' is not recognized as a cmdlet, function, script file, or operable program.');
+            el.appendChild(document.createElement('br'));
+            el.append("Check the spelling of the name, or type 'help' for available commands.");
+            history.appendChild(el);
+            scrollBottom();
+        }
+
+        termBody.addEventListener('click', () => {
+            if (inputRow.style.display !== 'none') cmdInput.focus();
+        });
+
+        cmdInput.addEventListener('keydown', function (e) {
             if (e.key !== 'Enter') return;
             const raw = this.value.trim();
             const cmd = raw.toLowerCase();
             this.value = '';
             printCmd(raw);
 
-            if (cmd === '') return;
+            if (cmd === '') { scrollBottom(); return; }
 
             if (cmd === 'clear') {
                 history.innerHTML = '';
@@ -727,31 +353,69 @@ d----- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3/26/2026 11:20 PM&nbsp;&nbsp;&nbsp;c
             } else if (commands[cmd]) {
                 printOutput(commands[cmd]);
             } else {
-                printOutput(`<span style="color:var(--error);">'${raw}' is not recognized as a cmdlet, function, script file, or operable program.<br>Check the spelling of the name, or type 'help' for available commands.</span>`, true);
+                printError(raw);
             }
 
             scrollBottom();
             setTimeout(() => this.focus(), 10);
         });
 
-        /* ---- Boot sequence ---- */
+        /* ── Matrix easter egg, recoloured to the site accent ── */
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        let matrixRaf = null;
+
+        function startMatrix() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%<>[]{}';
+            const fontSize = 14;
+            const cols = Math.floor(canvas.width / fontSize);
+            const drops = Array(cols).fill(1);
+            canvas.classList.add('active');
+
+            const fade = getComputedStyle(root).getPropertyValue('--bg').trim() || '#000';
+
+            function draw() {
+                ctx.fillStyle = 'rgba(4, 7, 10, 0.06)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#4da3ff';
+                ctx.font = fontSize + 'px ui-monospace, monospace';
+                drops.forEach((y, i) => {
+                    ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * fontSize, y * fontSize);
+                    if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                    drops[i]++;
+                });
+                matrixRaf = requestAnimationFrame(draw);
+            }
+            if (matrixRaf) cancelAnimationFrame(matrixRaf);
+            draw();
+        }
+
+        function stopMatrix() {
+            if (matrixRaf) { cancelAnimationFrame(matrixRaf); matrixRaf = null; }
+            canvas.classList.remove('active');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        /* ── Boot sequence ───────────────────────────────────── */
         const bootCmd = './get_contact_info.ps1';
-        let bi = 0;
 
         function boot() {
-            const bootLine = document.createElement('div');
-            bootLine.className = 'hist-cmd';
-            bootLine.innerHTML = `<span class="prompt"><span class="path">PS</span> C:\\Users\\kraken&gt;</span><span class="cmd-text" id="boot-typer"></span><span class="cursor-blink"></span>`;
-            history.appendChild(bootLine);
+            const line = document.createElement('div');
+            line.className = 'hist-cmd';
+            line.innerHTML = PROMPT + '<span class="cmd-text" id="boot-typer"></span><span class="cursor-blink"></span>';
+            history.appendChild(line);
             const typer = document.getElementById('boot-typer');
+            let i = 0;
 
             function typeChar() {
-                if (bi < bootCmd.length) {
-                    typer.textContent += bootCmd[bi++];
+                if (i < bootCmd.length) {
+                    typer.textContent += bootCmd[i++];
                     setTimeout(typeChar, 45);
                 } else {
-                    // Remove cursor from boot line
-                    bootLine.innerHTML = `<span class="prompt"><span class="path">PS</span> C:\\Users\\kraken&gt;</span><span class="cmd-text">${bootCmd}</span>`;
+                    line.innerHTML = PROMPT + '<span class="cmd-text"></span>';
+                    line.querySelector('.cmd-text').textContent = bootCmd;
                     setTimeout(() => {
                         printOutput(commands[bootCmd]);
                         inputRow.style.display = 'flex';
@@ -760,11 +424,11 @@ d----- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3/26/2026 11:20 PM&nbsp;&nbsp;&nbsp;c
                     }, 350);
                 }
             }
-
             setTimeout(typeChar, 700);
         }
 
         window.addEventListener('load', boot);
     </script>
 </body>
+
 </html>
