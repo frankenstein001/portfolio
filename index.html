@@ -18,7 +18,6 @@
             }
         } catch (e) { }
     </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
     <link rel="stylesheet" href="style.css">
     <noscript>
         <style>
@@ -494,12 +493,20 @@
                         <span class="hud-corner tr"></span>
                         <span class="hud-corner bl"></span>
                         <span class="hud-corner br"></span>
-                        <span class="hud-scan"></span>
+                        <span class="hud-reticle">
+                            <i class="r-ring r1"></i>
+                            <i class="r-ring r2"></i>
+                            <i class="r-ring r3"></i>
+                            <i class="r-ping"></i>
+                            <i class="r-cross"></i>
+                            <i class="r-dot"></i>
+                        </span>
                         <span class="hud-tag t1">SUBJECT&nbsp;/&nbsp;F. TRIPOLE</span>
                         <span class="hud-tag t2">LAT 10.5199&deg;N &nbsp; LNG 124.0272&deg;E</span>
                         <span class="hud-tag t3">SIG&nbsp;<b>LOCKED</b></span>
                         <span class="hud-tag t4">MODE&nbsp;<b>HYBRID-SAT</b> &middot; ZM&nbsp;<b id="mc-zoom">16</b></span>
                     </div>
+                </div>
                 </div>
                 <div class="map-console-bar foot">
                     <span class="mc-id">GRID REF &middot; 10.5199 / 124.0272</span>
@@ -568,10 +575,114 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 
     <script>
-        /* ── Location feed (Leaflet — no API key, no static fallback) ── */
+        /* ── Location feed ───────────────────────────────────── */
+        (function () {
+            const FEED = { lat: 10.5199, lng: 124.0272 };
+            const KEY = 'AIzaSyCtrD5bCZHCrm9AV2QzqTdJWbWh3UUpbWA';
+            const mapEl = document.getElementById('map');
+            if (!mapEl) return;
+
+            function fail(reason) {
+                console.warn('[map] ' + reason);
+            }
+
+            // Google calls this globally when the key is rejected.
+            window.gm_authFailure = () => fail('authentication failed');
+
+            window.initMap = function initMap() {
+                if (!window.google || !google.maps) return fail('api object missing');
+
+                let map;
+                try {
+                    map = new google.maps.Map(mapEl, {
+                        center: FEED,
+                        zoom: 16,
+                        mapTypeId: google.maps.MapTypeId.HYBRID,
+                        tilt: 0,
+                        backgroundColor: '#04070a',
+                        mapTypeControl: false,
+                        streetViewControl: false,
+                        fullscreenControl: false
+                    });
+                } catch (err) {
+                    return fail('map constructor threw: ' + err.message);
+                }
+
+
+                // Keep the HUD reticle pinned to the coordinates through pan and
+                // zoom. It lives outside #map so the colour filter leaves it alone.
+                const reticle = document.querySelector('.hud-reticle');
+                if (reticle) {
+                    const pin = new google.maps.OverlayView();
+                    pin.onAdd = pin.onRemove = function () { };
+                    pin.draw = function () {
+                        const proj = this.getProjection();
+                        if (!proj) return;
+                        const pt = proj.fromLatLngToContainerPixel(new google.maps.LatLng(FEED.lat, FEED.lng));
+                        if (!pt) return;
+                        reticle.style.left = pt.x + 'px';
+                        reticle.style.top = pt.y + 'px';
+                    };
+                    pin.setMap(map);
+                }
+
+                const zoomOut = document.getElementById('mc-zoom');
+                if (zoomOut) {
+                    const sync = () => { zoomOut.textContent = map.getZoom(); };
+                    map.addListener('zoom_changed', sync);
+                    sync();
+                }
+
+                // A map built before its container has settled can come up blank
+                // or mis-sized. Nudge it the first time the section scrolls in,
+                // and again on resize, then re-centre so the reticle stays put.
+                function refresh() {
+                    google.maps.event.trigger(map, 'resize');
+                    map.setCenter(FEED);
+                }
+
+                const section = document.getElementById('location');
+                if (section && 'IntersectionObserver' in window) {
+                    const io = new IntersectionObserver(entries => {
+                        if (entries.some(e => e.isIntersecting)) {
+                            refresh();
+                            io.disconnect();
+                        }
+                    }, { threshold: 0.01 });
+                    io.observe(section);
+                }
+
+                let rt;
+                addEventListener('resize', () => {
+                    clearTimeout(rt);
+                    rt = setTimeout(refresh, 200);
+                }, { passive: true });
+            };
+
+            // loading=async is Google's recommended pattern and silences the
+            // performance warning; the callback fires once the API is parsed.
+            const tag = document.createElement('script');
+            tag.src = 'https://maps.googleapis.com/maps/api/js?key=' + KEY +
+                '&callback=initMap&loading=async&v=weekly';
+            tag.async = true;
+            tag.onerror = () => fail('script failed to load');
+            document.head.appendChild(tag);
+
+            // Clock runs regardless of whether the map came up.
+            const clock = document.getElementById('mc-clock');
+            if (clock) {
+                const pad = n => String(n).padStart(2, '0');
+                const tick = () => {
+                    const d = new Date();
+                    clock.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+                };
+                tick();
+                setInterval(tick, 1000);
+            }
+        })();
+
         (function () {
             const mapEl = document.getElementById('map');
             if (!mapEl || typeof L === 'undefined') return;
