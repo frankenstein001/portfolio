@@ -44,8 +44,10 @@
                         </svg><svg class="ico-moon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M20.6 13.4A8.7 8.7 0 0 1 10.6 3.4a8.7 8.7 0 1 0 10 10Z" />
                         </svg></button></li>
+                <li><span class="visit-counter" hidden title="Visitors"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1.8 12S5.4 5.4 12 5.4 22.2 12 22.2 12 18.6 18.6 12 18.6 1.8 12 1.8 12Z"/><circle cx="12" cy="12" r="3.1"/></svg><b class="visit-count">0</b></span></li>
             </ul>
             <div style="display:flex;align-items:center;gap:8px;">
+                <span class="visit-counter mob" hidden title="Visitors"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1.8 12S5.4 5.4 12 5.4 22.2 12 22.2 12 18.6 18.6 12 18.6 1.8 12 1.8 12Z"/><circle cx="12" cy="12" r="3.1"/></svg><b class="visit-count">0</b></span>
                 <button id="theme-toggle-mob" type="button" title="Toggle theme" aria-label="Toggle colour theme"><svg
                         class="ico-sun" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
                         <circle cx="12" cy="12" r="4" />
@@ -428,6 +430,33 @@ d----- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3/26/2026 11:20 PM&nbsp;&nbsp;&nbsp;c
         }
 
         window.addEventListener('load', boot);
+        /* ── Visitor counter ─────────────────────────────────────
+           Counts once per browser: the first visit hits the counter,
+           every later load (including reloads) only reads it. */
+        (function () {
+            const readouts = document.querySelectorAll('.visit-count');
+            if (!readouts.length) return;
+
+            const BASE = 'https://abacus.jasoncameron.dev';
+            const NS = 'syskraken-portfolio';
+            const KEY = 'visits';
+            const FLAG = 'ft_counted';
+
+            let first = false;
+            try { first = !localStorage.getItem(FLAG); } catch (e) { first = false; }
+
+            fetch(BASE + (first ? '/hit/' : '/get/') + NS + '/' + KEY)
+                .then(r => r.ok ? r.json() : Promise.reject(r.status))
+                .then(data => {
+                    if (!data || typeof data.value !== 'number') throw new Error('bad payload');
+                    readouts.forEach(el => { el.textContent = data.value.toLocaleString(); });
+                    document.querySelectorAll('.visit-counter')
+                        .forEach(el => el.removeAttribute('hidden'));
+                    if (first) { try { localStorage.setItem(FLAG, '1'); } catch (e) { } }
+                })
+                .catch(() => { /* service unreachable: leave the counter hidden */ });
+        })();
+
     </script>
 </body>
 

@@ -1777,10 +1777,11 @@
             pointer-events: none;
             z-index: 2;
             overflow: hidden;
-            /* Leave the bottom strip untouched so Google's logo and
-               attribution stay fully legible, as their terms require. */
-            -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 28px), transparent calc(100% - 28px));
-            mask-image: linear-gradient(to bottom, #000 calc(100% - 28px), transparent calc(100% - 28px));
+            /* The overlay runs edge to edge, easing off over the bottom strip
+               so Google's logo and attribution stay clearly legible without a
+               hard seam across the frame. */
+            -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 34px), rgba(0, 0, 0, .3) calc(100% - 14px), rgba(0, 0, 0, .3) 100%);
+            mask-image: linear-gradient(to bottom, #000 calc(100% - 34px), rgba(0, 0, 0, .3) calc(100% - 14px), rgba(0, 0, 0, .3) 100%);
         }
 
         /* scanline texture + vignette */
@@ -2232,4 +2233,57 @@
         @media(max-width:640px) {
             .contact-main { padding: 96px 0 60px }
             .term-body { padding: 16px; font-size: .74rem }
+        }
+
+        /* ─── VISITOR COUNTER ─────────────────── */
+        .visit-counter {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px 4px 9px;
+            border-radius: 20px;
+            border: 0.5px solid var(--border-med);
+            color: var(--text-tertiary);
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: .66rem;
+            letter-spacing: .04em;
+            white-space: nowrap;
+            cursor: default;
+            transition: border-color .25s var(--ease), color .25s var(--ease);
+        }
+
+        /* Class sets a display, so [hidden] needs saying explicitly. */
+        .visit-counter[hidden] { display: none }
+
+        .visit-counter:hover {
+            border-color: var(--accent);
+            color: var(--text-secondary);
+        }
+
+        .visit-counter svg {
+            width: 12px;
+            height: 12px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.6;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+
+        .visit-count {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .visit-counter.mob { display: none }
+
+        @media(max-width:800px) {
+            .visit-counter.mob:not([hidden]) { display: inline-flex }
+        }
+
+        /* Only drop it on the very narrowest phones, where the logo,
+           toggle and hamburger already fill the bar. */
+        @media(max-width:340px) {
+            .visit-counter.mob { display: none !important }
         }
