@@ -54,10 +54,10 @@
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#projects">Work</a></li>
                 <li><a href="contact.html" class="nav-cta">Contact</a></li>
-                <li><button id="theme-toggle" title="Toggle theme">🌙</button></li>
+                <li><button id="theme-toggle" type="button" title="Toggle theme" aria-label="Toggle colour theme"><svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M4.35 4.35l1.56 1.56M18.09 18.09l1.56 1.56M2.6 12h2.2M19.2 12h2.2M4.35 19.65l1.56-1.56M18.09 5.91l1.56-1.56"/></svg><svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1Z"/></svg></button></li>
             </ul>
             <div style="display:flex;align-items:center;gap:8px;">
-                <button id="theme-toggle-mob" title="Toggle theme">🌙</button>
+                <button id="theme-toggle-mob" type="button" title="Toggle theme" aria-label="Toggle colour theme"><svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M4.35 4.35l1.56 1.56M18.09 18.09l1.56 1.56M2.6 12h2.2M19.2 12h2.2M4.35 19.65l1.56-1.56M18.09 5.91l1.56-1.56"/></svg><svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1Z"/></svg></button>
                 <button class="hamburger" id="hamburger" aria-label="Open menu">
                     <span></span><span></span><span></span>
                 </button>
@@ -794,8 +794,8 @@
         const tm = document.getElementById('theme-toggle-mob');
         function setTheme(dark) {
             root.dataset.theme = dark ? 'dark' : '';
-            const icon = dark ? '☀️' : '🌙';
-            td.textContent = icon; tm.textContent = icon;
+            // Which icon shows is handled in CSS off [data-theme].
+            [td, tm].forEach(b => b.setAttribute('aria-pressed', String(dark)));
             localStorage.setItem('ft_theme', dark ? 'dark' : 'light');
         }
         setTheme(localStorage.getItem('ft_theme') !== 'light');

@@ -1930,3 +1930,58 @@
             .r-ping, .r2 { animation: none }
             .r-ping { opacity: .4 }
         }
+
+        /* ─── THEME TOGGLE ICONS ──────────────── */
+        #theme-toggle,
+        #theme-toggle-mob {
+            position: relative;
+            color: var(--text-secondary);
+            padding: 0;
+            overflow: hidden;
+        }
+
+        #theme-toggle:hover,
+        #theme-toggle-mob:hover {
+            color: var(--text);
+        }
+
+        #theme-toggle svg,
+        #theme-toggle-mob svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 15px;
+            height: 15px;
+            margin: -7.5px 0 0 -7.5px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: opacity .28s var(--ease), transform .45s var(--ease-spring);
+        }
+
+        /* Light theme: offer the moon. Dark theme: offer the sun. */
+        #theme-toggle .ico-sun,
+        #theme-toggle-mob .ico-sun {
+            opacity: 0;
+            transform: rotate(-70deg) scale(.5);
+        }
+
+        #theme-toggle .ico-moon,
+        #theme-toggle-mob .ico-moon {
+            opacity: 1;
+            transform: none;
+        }
+
+        [data-theme="dark"] #theme-toggle .ico-sun,
+        [data-theme="dark"] #theme-toggle-mob .ico-sun {
+            opacity: 1;
+            transform: none;
+        }
+
+        [data-theme="dark"] #theme-toggle .ico-moon,
+        [data-theme="dark"] #theme-toggle-mob .ico-moon {
+            opacity: 0;
+            transform: rotate(70deg) scale(.5);
+        }
