@@ -478,12 +478,12 @@
             <circle class="node-ring" cx="820" cy="590" r="7" />
         </svg>
         <div class="container">
-            <div class="section-eyebrow">04 / Danao City Cebu</div>
+            <div class="section-eyebrow">04 / Philippines</div>
             <h2 class="section-title" data-split-words>Where I'm Based</h2>
             <div class="map-console">
                 <div class="map-console-bar">
                     <span class="mc-dot"></span>
-                    <span class="mc-id">FEED&nbsp;01 &middot; DANAO CITY, CEBU</span>
+                    <span class="mc-id">FEED&nbsp;01 &middot; PHILIPPINES</span>
                     <span class="mc-status" id="mc-clock">--:--:--</span>
                 </div>
                 <div class="map-frame">
@@ -504,7 +504,7 @@
                         <span class="hud-tag t1">SUBJECT&nbsp;/&nbsp;F. TRIPOLE</span>
                         <span class="hud-tag t2">LAT 10.5199&deg;N &nbsp; LNG 124.0272&deg;E</span>
                         <span class="hud-tag t3">SIG&nbsp;<b>LOCKED</b></span>
-                        <span class="hud-tag t4">MODE&nbsp;<b>HYBRID-SAT</b> &middot; ZM&nbsp;<b id="mc-zoom">16</b></span>
+                        <span class="hud-tag t4">MODE&nbsp;<b>HYBRID-SAT</b> &middot; ZM&nbsp;<b id="mc-zoom">6</b></span>
                     </div>
                 </div>
                 </div>
@@ -579,7 +579,9 @@
     <script>
         /* ── Location feed ───────────────────────────────────── */
         (function () {
-            const FEED = { lat: 10.5199, lng: 124.0272 };
+            const FEED = { lat: 10.5199, lng: 124.0272 };   // the tracked position
+            const VIEW = { lat: 12.4000, lng: 122.5000 };   // framing: the archipelago
+            const VIEW_ZOOM = 6;
             const KEY = 'AIzaSyCtrD5bCZHCrm9AV2QzqTdJWbWh3UUpbWA';
             const mapEl = document.getElementById('map');
             if (!mapEl) return;
@@ -597,8 +599,8 @@
                 let map;
                 try {
                     map = new google.maps.Map(mapEl, {
-                        center: FEED,
-                        zoom: 16,
+                        center: VIEW,
+                        zoom: VIEW_ZOOM,
                         mapTypeId: google.maps.MapTypeId.HYBRID,
                         tilt: 0,
                         backgroundColor: '#04070a',
@@ -640,7 +642,7 @@
                 // and again on resize, then re-centre so the reticle stays put.
                 function refresh() {
                     google.maps.event.trigger(map, 'resize');
-                    map.setCenter(FEED);
+                    map.setCenter(VIEW);
                 }
 
                 const section = document.getElementById('location');
