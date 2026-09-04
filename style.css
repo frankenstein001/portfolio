@@ -1931,41 +1931,64 @@
             .r-ping { opacity: .4 }
         }
 
-        /* ─── THEME TOGGLE ICONS ──────────────── */
+        /* ─── THEME TOGGLE ───────────────────── */
         #theme-toggle,
         #theme-toggle-mob {
             position: relative;
-            color: var(--text-secondary);
+            width: 32px;
+            height: 32px;
             padding: 0;
+            flex-shrink: 0;
+            border-radius: 50%;
+            border: 0.5px solid var(--border-med);
+            background: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             overflow: hidden;
+            transition: background .25s var(--ease), color .25s var(--ease),
+                border-color .25s var(--ease), transform .35s var(--ease-spring);
         }
 
+        /* Same hover treatment as the nav links, so it reads as part of the set */
         #theme-toggle:hover,
         #theme-toggle-mob:hover {
+            background: var(--border);
             color: var(--text);
+            transform: scale(1.08);
+        }
+
+        #theme-toggle:active,
+        #theme-toggle-mob:active {
+            transform: scale(.94);
+        }
+
+        #theme-toggle:focus-visible,
+        #theme-toggle-mob:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
         }
 
         #theme-toggle svg,
         #theme-toggle-mob svg {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 15px;
-            height: 15px;
-            margin: -7.5px 0 0 -7.5px;
+            width: 16px;
+            height: 16px;
             fill: none;
             stroke: currentColor;
-            stroke-width: 1.8;
+            stroke-width: 1.7;
             stroke-linecap: round;
             stroke-linejoin: round;
-            transition: opacity .28s var(--ease), transform .45s var(--ease-spring);
+            transition: opacity .3s var(--ease), transform .45s var(--ease-spring);
         }
 
-        /* Light theme: offer the moon. Dark theme: offer the sun. */
+        /* Light theme offers the moon; dark theme offers the sun. */
         #theme-toggle .ico-sun,
         #theme-toggle-mob .ico-sun {
             opacity: 0;
-            transform: rotate(-70deg) scale(.5);
+            transform: rotate(-90deg) scale(.4);
         }
 
         #theme-toggle .ico-moon,
@@ -1983,5 +2006,5 @@
         [data-theme="dark"] #theme-toggle .ico-moon,
         [data-theme="dark"] #theme-toggle-mob .ico-moon {
             opacity: 0;
-            transform: rotate(70deg) scale(.5);
+            transform: rotate(90deg) scale(.4);
         }
