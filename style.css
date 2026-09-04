@@ -2276,14 +2276,20 @@
             font-weight: 600;
         }
 
+        /* Desktop: pinned to the far right of the bar, clear of the
+           centred nav group. */
+        .visit-counter.edge {
+            position: absolute;
+            right: clamp(16px, 3vw, 34px);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Mobile: rides inline with the toggle and hamburger, since the
+           nav fills the full width there and the edge is already taken. */
         .visit-counter.mob { display: none }
 
         @media(max-width:800px) {
+            .visit-counter.edge { display: none !important }
             .visit-counter.mob:not([hidden]) { display: inline-flex }
-        }
-
-        /* Only drop it on the very narrowest phones, where the logo,
-           toggle and hamburger already fill the bar. */
-        @media(max-width:340px) {
-            .visit-counter.mob { display: none !important }
         }
