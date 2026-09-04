@@ -190,6 +190,7 @@
     </div>
 
     <footer>
+        <canvas id="footer-canvas"></canvas>
         <div class="footer-brand">
             <a href="index.html" class="footer-logo">Franklin Tripole</a>
             <p class="footer-text">Building high-performance digital experiences from Danao City, Philippines.</p>
@@ -455,6 +456,96 @@ d----- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3/26/2026 11:20 PM&nbsp;&nbsp;&nbsp;c
                     if (first) { try { localStorage.setItem(FLAG, '1'); } catch (e) { } }
                 })
                 .catch(() => { /* service unreachable: leave the counter hidden */ });
+        })();
+
+        /* ── Footer constellation ────────────────────────────── */
+        (function () {
+            const canvas = document.getElementById('footer-canvas');
+            const footer = canvas && canvas.closest('footer');
+            if (!canvas || !footer) return;
+
+            const ctx = canvas.getContext('2d');
+            const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const isMobile = () => matchMedia('(max-width: 640px)').matches;
+
+            let W = 0, H = 0, stars = [], raf = null, onScreen = true;
+            let link = 110;
+
+            function mkStar() {
+                const m = isMobile();
+                return {
+                    x: Math.random() * W,
+                    y: Math.random() * H,
+                    r: Math.random() * (m ? 1.1 : 1.6) + (m ? 0.2 : 0.3),
+                    vx: (Math.random() - 0.5) * (m ? 0.16 : 0.24),
+                    vy: (Math.random() - 0.5) * (m ? 0.1 : 0.14),
+                    a: Math.random() * 0.85 + 0.15
+                };
+            }
+
+            function resize() {
+                const rect = footer.getBoundingClientRect();
+                if (!rect.width || !rect.height) return;
+                const dpr = Math.min(devicePixelRatio || 1, 2);
+                canvas.width = rect.width * dpr;
+                canvas.height = rect.height * dpr;
+                // setTransform, not scale — scale would compound on every resize.
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                W = rect.width;
+                H = rect.height;
+                link = isMobile() ? 70 : 110;
+                const count = isMobile() ? 70 : 160;
+                stars = Array.from({ length: count }, mkStar);
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, W, H);
+                for (const s of stars) {
+                    s.x += s.vx; s.y += s.vy;
+                    if (s.x < 0) s.x = W; else if (s.x > W) s.x = 0;
+                    if (s.y < 0) s.y = H; else if (s.y > H) s.y = 0;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(160,196,255,' + (s.a * 0.6) + ')';
+                    ctx.fill();
+                }
+                for (let i = 0; i < stars.length; i++) {
+                    for (let j = i + 1; j < stars.length; j++) {
+                        const dx = stars[i].x - stars[j].x;
+                        const dy = stars[i].y - stars[j].y;
+                        const d = Math.hypot(dx, dy);
+                        if (d < link) {
+                            ctx.beginPath();
+                            ctx.moveTo(stars[i].x, stars[i].y);
+                            ctx.lineTo(stars[j].x, stars[j].y);
+                            ctx.strokeStyle = 'rgba(100,150,230,' + ((1 - d / link) * 0.16) + ')';
+                            ctx.lineWidth = 0.6;
+                            ctx.stroke();
+                        }
+                    }
+                }
+                raf = requestAnimationFrame(draw);
+            }
+
+            // One loop only, and only while the footer is actually on screen.
+            function start() { if (!raf) raf = requestAnimationFrame(draw); }
+            function stop() { if (raf) { cancelAnimationFrame(raf); raf = null; } }
+
+            new ResizeObserver(resize).observe(footer);
+            resize();
+
+            if (reduced) { draw(); stop(); return; }
+
+            new IntersectionObserver(([e]) => {
+                onScreen = e.isIntersecting;
+                onScreen ? start() : stop();
+            }, { threshold: 0 }).observe(footer);
+
+            document.addEventListener('visibilitychange', () => {
+                (document.hidden || !onScreen) ? stop() : start();
+            });
+
+            start();
         })();
 
     </script>
