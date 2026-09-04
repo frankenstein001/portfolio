@@ -450,6 +450,47 @@
         </div>
     </section>
 
+    <section id="network" class="reveal">
+        <svg class="cables" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <path class="wire" d="M-60 140 C 260 250 620 60 1500 200" />
+            <path class="wire" d="M-60 330 C 380 460 880 250 1500 380" />
+            <path class="wire" d="M-60 560 C 320 690 820 480 1500 610" />
+            <path class="rail" d="M-60 220 H 240 V 470 H 640 V 700 H 1500" />
+            <path class="flow d1" d="M-60 220 H 240 V 470 H 640 V 700 H 1500" />
+            <path class="flow d2" d="M-60 330 C 380 460 880 250 1500 380" />
+            <circle class="node" cx="240" cy="220" r="3" />
+            <circle class="node-ring" cx="240" cy="220" r="7" />
+            <circle class="node" cx="640" cy="470" r="3" />
+            <circle class="node-ring" cx="640" cy="470" r="7" />
+        </svg>
+        <div class="container">
+            <div class="section-eyebrow">04 / Network Lab</div>
+            <h2 class="section-title" data-split-words>Trace The Topology</h2>
+            <p class="lab-lead">
+                This is the shape of my own setup, drawn live. Pull a patch cable out and everything
+                behind the break loses link — the same way it does at 2am when a cable works loose in
+                the rack. Click a cable to unplug it, or drag the connector out and drop it back on
+                its port.
+            </p>
+
+            <div class="lab">
+                <div class="lab-stage">
+                    <svg id="net-svg" viewBox="0 0 820 420" role="img"
+                        aria-label="Interactive network topology: fibre ONT to firewall to core switch, feeding a server, workstation, access point and NAS.">
+                    </svg>
+                </div>
+                <aside class="lab-panel">
+                    <div class="lab-panel-head">
+                        <span class="lab-dot"></span> Link status
+                    </div>
+                    <ul id="lab-status" class="lab-status"></ul>
+                    <p id="lab-note" class="lab-note"></p>
+                    <button type="button" id="lab-reset" class="lab-reset">Re-seat all cables</button>
+                </aside>
+            </div>
+        </div>
+    </section>
+
     <section id="location" class="reveal">
         <svg class="cables" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
             <path class="wire" d="M-60 140 C 260 250 620 60 1500 200" />
@@ -480,7 +521,7 @@
             <circle class="node-ring" cx="820" cy="590" r="7" />
         </svg>
         <div class="container">
-            <div class="section-eyebrow">04 / Philippines</div>
+            <div class="section-eyebrow">05 / Philippines</div>
             <h2 class="section-title" data-split-words>Where I'm Based</h2>
             <div class="map-console">
                 <div class="map-console-bar">
@@ -1173,6 +1214,7 @@
         })();
 
     </script>
+    <script src="network-lab.js" defer></script>
 </body>
 
 </html>
