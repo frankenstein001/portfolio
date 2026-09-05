@@ -2588,3 +2588,126 @@
             grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
             gap: 0 20px;
         }
+
+        /* ═══════════════════════════════════════════════════════
+           PAGE SHELL + TYPE SCALE
+           One measure for every full-width band, so the nav, the
+           sections and the footer all line up on the same edges.
+           ═══════════════════════════════════════════════════════ */
+        :root {
+            --shell: 1280px;
+            --gutter: clamp(20px, 4vw, 40px);
+            --shell-pad: max(var(--gutter), (100% - var(--shell)) / 2);
+        }
+
+        .container {
+            width: min(100% - (var(--gutter) * 2), var(--shell));
+            margin-inline: auto;
+        }
+
+        .nav-inner {
+            width: min(100% - (var(--gutter) * 2), var(--shell));
+            max-width: none;
+            padding: 0;
+            margin-inline: auto;
+            height: 60px;
+        }
+
+        .mobile-menu {
+            top: 60px;
+            padding-inline: var(--shell-pad);
+        }
+
+        footer,
+        .patch-strip {
+            padding-inline: var(--shell-pad);
+        }
+
+        /* ─── Type scale ──────────────────────── */
+        body { font-size: 1.0625rem }
+
+        .nav-links a { font-size: .92rem }
+        .logo { font-size: 1.15rem }
+        .mobile-menu a { font-size: 1rem }
+
+        .hero-eyebrow { font-size: .86rem }
+        .hero-subtitle { font-size: clamp(1.05rem, 2.2vw, 1.3rem) }
+        .hero-badge-text { font-size: .86rem }
+        .hero-badge-sub { font-size: .78rem }
+        .btn { font-size: .96rem }
+
+        .section-eyebrow { font-size: .78rem }
+        h2.section-title { font-size: clamp(2rem, 4.2vw, 3rem) }
+
+        .about-text { font-size: clamp(1.02rem, 1.8vw, 1.14rem) }
+        .stack-title { font-size: .78rem }
+        .tech-category h3 { font-size: 1.05rem }
+        .badge-grid img { height: 32px }
+
+        .stat-card .num { font-size: 2.4rem }
+        .stat-card .lbl { font-size: .84rem }
+
+        .exp-body h4 { font-size: 1.22rem }
+        .exp-meta { font-size: .86rem }
+        .exp-body p { font-size: 1.02rem }
+
+        .cat-label { font-size: .78rem }
+        .proj-title { font-size: 1.06rem }
+        .proj-desc { font-size: .92rem }
+        .proj-tag { font-size: .74rem }
+
+        .cover-grid.compact .proj-title { font-size: .95rem }
+        .cover-grid.compact .proj-desc { font-size: .84rem }
+        .cover-grid.compact .proj-tag { font-size: .7rem }
+
+        .lab-lead { font-size: clamp(1.02rem, 1.8vw, 1.14rem) }
+        .lab-tab { font-size: .86rem }
+        .lab-scene-title { font-size: .92rem }
+        .lab-panel-head { font-size: .74rem }
+        .lab-status li { font-size: .88rem }
+        .lab-status b { font-size: .7rem }
+        .lab-note { font-size: .8rem }
+        .lab-reset { font-size: .82rem }
+
+        .map-console-bar { font-size: .7rem }
+        .hud-tag { font-size: .64rem }
+
+        .contact-lead { font-size: clamp(1.02rem, 1.8vw, 1.14rem) }
+        .term-body { font-size: .88rem }
+        .term-title { font-size: .72rem }
+        .reach-label { font-size: .74rem }
+        .reach-value { font-size: .94rem }
+
+        .modal-proj-name { font-size: 1.22rem }
+        .modal-desc { font-size: .96rem }
+        .modal-role-label { font-size: .74rem }
+        .modal-role p { font-size: .92rem }
+        .modal-tag { font-size: .74rem }
+
+        .footer-logo { font-size: 1.12rem }
+        .footer-text { font-size: .9rem }
+        .footer-meta { font-size: .88rem }
+        .footer-copy { font-size: .82rem }
+
+        .visit-counter { font-size: .72rem }
+
+        /* The diagram already renders larger because the wider shell gives
+           the stage more room, so only the name gains a point — the sub and
+           state lines are sized to the chassis and would overflow it. */
+        .nl-name { font-size: 14px }
+
+        @media(max-width:700px) {
+            .nl-name { font-size: 13px }
+        }
+
+        @media(max-width:800px) {
+            .nav-inner { height: 56px }
+            .mobile-menu { top: 56px }
+        }
+
+        /* Larger type needs a little more air under the section heading */
+        h2.section-title + .about-text,
+        h2.section-title + .lab-lead,
+        h2.section-title + .contact-lead {
+            margin-top: 18px;
+        }
