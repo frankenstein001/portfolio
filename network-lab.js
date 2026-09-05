@@ -24,6 +24,36 @@
         sky: '#38bdf8', yellow: '#eab308', rose: '#fb7185', blue: '#3b82f6'
     };
 
+    /* What a given stage reports when its inputs are not there. */
+    const FAULT_BY_ID = {
+        ont: 'no signal on the WAN port',
+        fw: 'WAN interface down',
+        sw: 'uplink lost, no carrier',
+        server: 'host unreachable',
+        srv: 'host unreachable',
+        nas: 'backup share not mounted',
+        ap: 'PoE link lost, radios down',
+        ws: 'no network on eth0',
+        design: 'source file unavailable',
+        platform: 'no build source to publish',
+        edge: 'origin unreachable (HTTP 502)',
+        clients: 'site not being served',
+        desktop: 'breakpoint not reachable',
+        tablet: 'breakpoint not reachable',
+        mobile: 'breakpoint not reachable',
+        vitals: 'crawl failed, no metrics collected',
+        form: 'endpoint returning 502',
+        hook: 'webhook not responding (HTTP 503)',
+        n8n: 'workflow engine offline',
+        sheet: 'API write failed',
+        telegram: 'bot API unreachable',
+        mail: 'SMTP relay refused',
+        uptime: 'scheduled check not running',
+        actions: 'no downstream actions dispatched'
+    };
+
+    const FAULT_DEFAULT = 'upstream dependency unavailable';
+
     /* ── Single-layer views, generated from a chain + 4 leaves ── */
     const LAYERS = {
         web: {
@@ -379,6 +409,10 @@
             }, g);
         });
 
+        lastSignature = null;
+        lastLive = null;
+        if (logEl) logEl.innerHTML = '';
+
         L.cables.forEach(c => {
             if (state[current][c.id] === undefined) state[current][c.id] = true;
 
@@ -409,6 +443,8 @@
         });
 
         render();
+        log('info', SCENES[current].tab + ' loaded — ' + L.devices.length +
+            ' stages, ' + L.cables.length + ' links');
     }
 
     /* ── Geometry + render ─────────────────────────────────── */
@@ -459,12 +495,88 @@
         });
 
         panel(live);
+        report(live);
+        alertState(live);
     }
 
     /* ── Panel ─────────────────────────────────────────────── */
     const list = document.getElementById('lab-status');
     const note = document.getElementById('lab-note');
     const heading = document.getElementById('lab-scene-title');
+    const logEl = document.getElementById('lab-log');
+    const alertEl = document.getElementById('lab-alert');
+    const alertDot = document.getElementById('lab-alert-dot');
+
+    const MAX_LOG = 60;
+
+    function stamp() {
+        const d = new Date();
+        const p = n => String(n).padStart(2, '0');
+        return p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+    }
+
+    function log(level, text) {
+        if (!logEl) return;
+        const li = document.createElement('li');
+        li.className = 'lvl-' + level;
+        const t = document.createElement('time');
+        t.textContent = stamp();
+        const l = document.createElement('b');
+        l.textContent = level.toUpperCase();
+        const m = document.createElement('span');
+        m.textContent = text;
+        li.append(t, l, m);
+        logEl.prepend(li);
+        while (logEl.children.length > MAX_LOG) logEl.lastElementChild.remove();
+    }
+
+    // Only diff-and-report when the plug state actually changed, so a drag
+    // that holds a cable out does not fill the log with the same line.
+    let lastSignature = null;
+    let lastLive = null;
+
+    function report(live) {
+        const plugged = state[current];
+        const signature = L.cables.map(c => (plugged[c.id] === false ? '0' : '1')).join('');
+        if (signature === lastSignature) { lastLive = live; return; }
+
+        const first = lastSignature === null;
+        const prev = lastLive;
+        lastSignature = signature;
+
+        if (!first && prev) {
+            L.cables.forEach(c => {
+                const wasOut = prev.cuts.has(c.id);
+                const isOut = plugged[c.id] === false;
+                if (isOut && !wasOut) log('err', c.label + ' — link down');
+                else if (!isOut && wasOut) log('ok', c.label + ' — link restored');
+            });
+
+            L.devices.forEach(d => {
+                const wasUp = prev.up.has(d.id);
+                const isUp = live.has(d.id);
+                if (wasUp && !isUp) log('err', d.label + ': ' + (FAULT_BY_ID[d.id] || FAULT_DEFAULT));
+                else if (!wasUp && isUp) log('ok', d.label + ': back online');
+            });
+
+            const dead = L.devices.length - live.size;
+            if (dead > 0) log('warn', 'topology degraded — ' + dead + ' of ' + L.devices.length + ' stages offline');
+            else log('ok', 'topology healthy — all ' + L.devices.length + ' stages online');
+        }
+
+        lastLive = { up: new Set(live), cuts: new Set(L.cables.filter(c => plugged[c.id] === false).map(c => c.id)) };
+    }
+
+    function alertState(live) {
+        if (!alertEl) return;
+        const dead = L.devices.length - live.size;
+        const broken = dead > 0;
+        alertEl.textContent = broken
+            ? dead + (dead === 1 ? ' stage offline' : ' stages offline') + ' — check the highlighted links'
+            : 'Topology healthy';
+        alertEl.parentElement.classList.toggle('is-bad', broken);
+        if (alertDot) alertDot.classList.toggle('is-bad', broken);
+    }
 
     function panel(live) {
         if (heading) heading.textContent = SCENES[current].title;
@@ -580,6 +692,7 @@
                 cableEls[c.id].loose = null;
             });
             render();
+            log('info', 'all cables re-seated');
         });
     }
 

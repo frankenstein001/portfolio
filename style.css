@@ -2711,3 +2711,102 @@
         h2.section-title + .contact-lead {
             margin-top: 18px;
         }
+
+        /* ─── LAB DIAGNOSTIC CONSOLE ──────────── */
+        .lab-console {
+            margin-top: 16px;
+            border: 0.5px solid var(--border-med);
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: #0b0d10;
+            box-shadow: var(--shadow-sm);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        }
+
+        .lab-console-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, .035);
+            border-bottom: 1px solid rgba(255, 255, 255, .07);
+            font-size: .72rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .lab-console-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 8px rgba(34, 197, 94, .8);
+            flex-shrink: 0;
+            transition: background .3s, box-shadow .3s;
+        }
+
+        .lab-console-dot.is-bad {
+            background: #ff6b6b;
+            box-shadow: 0 0 8px rgba(255, 107, 107, .8);
+            animation: lab-alarm 1.3s steps(1) infinite;
+        }
+
+        @keyframes lab-alarm {
+            0%, 55% { opacity: 1 }
+            56%, 100% { opacity: .3 }
+        }
+
+        .lab-console-state {
+            flex: 1;
+            color: #7fe0a6;
+            transition: color .3s;
+        }
+
+        .lab-console-bar.is-bad .lab-console-state { color: #ff8f8f }
+
+        .lab-console-meta { color: #5c6674 }
+
+        .lab-log {
+            list-style: none;
+            margin: 0;
+            padding: 10px 14px;
+            max-height: 190px;
+            overflow-y: auto;
+            font-size: .76rem;
+            line-height: 1.65;
+            color: #aab4c2;
+        }
+
+        .lab-log:empty::after {
+            content: 'waiting for events…';
+            color: #4d5663;
+        }
+
+        .lab-log li {
+            display: grid;
+            grid-template-columns: 62px 42px 1fr;
+            gap: 10px;
+            padding: 2px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .04);
+        }
+
+        .lab-log li:last-child { border-bottom: none }
+
+        .lab-log time { color: #5c6674 }
+        .lab-log b { font-weight: 700; letter-spacing: .06em }
+
+        .lab-log .lvl-err b { color: #ff6b6b }
+        .lab-log .lvl-warn b { color: #eab308 }
+        .lab-log .lvl-ok b { color: #22c55e }
+        .lab-log .lvl-info b { color: #4da3ff }
+        .lab-log .lvl-err span { color: #ffc9c9 }
+
+        .lab-log::-webkit-scrollbar { width: 6px }
+        .lab-log::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .14); border-radius: 6px }
+
+        @media(max-width:640px) {
+            .lab-log { font-size: .7rem; max-height: 160px }
+            .lab-log li { grid-template-columns: 54px 36px 1fr; gap: 7px }
+            .lab-console-bar { font-size: .66rem }
+            .lab-console-meta { display: none }
+        }
