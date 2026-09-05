@@ -2573,3 +2573,18 @@
             .nl-sub { font-size: 9px }
             .nl-state { font-size: 8.5px }
         }
+
+        /* Full-trace view needs the whole width, so the panel drops below */
+        .lab.is-wide {
+            grid-template-columns: 1fr;
+        }
+
+        .lab.is-wide .lab-panel {
+            position: static;
+        }
+
+        .lab.is-wide .lab-status {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+            gap: 0 20px;
+        }
