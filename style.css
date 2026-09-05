@@ -2328,10 +2328,8 @@
         #net-svg {
             display: block;
             width: 100%;
-            min-width: 560px;
             height: auto;
             font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-            touch-action: none;
         }
 
         /* Devices */
@@ -2377,6 +2375,7 @@
         .nl-cable {
             cursor: grab;
             outline: none;
+            touch-action: none;
         }
 
         .nl-cable:active { cursor: grabbing }
@@ -2513,4 +2512,64 @@
         @media (prefers-reduced-motion: reduce) {
             .nl-jacket, .nl-sheen, .nl-plug { transition: none }
             .nl-device:not(.is-down) .nl-led { animation: none }
+        }
+
+        /* ─── STACK LAB: TABS + MOBILE ────────── */
+        .lab-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 26px;
+        }
+
+        .lab-tab {
+            padding: 8px 16px;
+            border-radius: 980px;
+            border: 0.5px solid var(--border-med);
+            background: none;
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: .78rem;
+            font-weight: 500;
+            letter-spacing: -.01em;
+            cursor: pointer;
+            transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
+        }
+
+        .lab-tab:hover {
+            color: var(--text);
+            border-color: var(--border-med);
+            background: var(--border);
+        }
+
+        .lab-tab[aria-pressed="true"] {
+            background: var(--accent);
+            border-color: transparent;
+            color: #fff;
+        }
+
+        .lab-tab:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .lab-scene-title {
+            font-size: .82rem;
+            line-height: 1.5;
+            color: var(--text);
+            font-weight: 500;
+            margin: -6px 0 14px;
+        }
+
+        /* Bigger grab targets where there is no mouse */
+        @media (pointer: coarse) {
+            .nl-hit { stroke-width: 40 }
+        }
+
+        @media(max-width:700px) {
+            .lab-stage { padding: 10px }
+            .lab-tab { font-size: .74rem; padding: 7px 13px }
+            .nl-name { font-size: 12.5px }
+            .nl-sub { font-size: 9px }
+            .nl-state { font-size: 8.5px }
         }

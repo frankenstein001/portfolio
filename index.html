@@ -464,25 +464,27 @@
             <circle class="node-ring" cx="640" cy="470" r="7" />
         </svg>
         <div class="container">
-            <div class="section-eyebrow">04 / Network Lab</div>
-            <h2 class="section-title" data-split-words>Trace The Topology</h2>
+            <div class="section-eyebrow">04 / Stack Lab</div>
+            <h2 class="section-title" data-split-words>Trace The Stack</h2>
             <p class="lab-lead">
-                This is the shape of my own setup, drawn live. Pull a patch cable out and everything
-                behind the break loses link — the same way it does at 2am when a cable works loose in
-                the rack. Click a cable to unplug it, or drag the connector out and drop it back on
-                its port.
+                Three layers of how I work, wired up and running. Pull a patch lead and everything
+                behind the break goes down with it. Tap or click a cable to unplug it, drag a
+                connector out and drop it back on its port, or tab to a cable and press Enter.
             </p>
+
+            <div class="lab-tabs" id="lab-tabs" role="group" aria-label="Choose a layer"></div>
 
             <div class="lab">
                 <div class="lab-stage">
                     <svg id="net-svg" viewBox="0 0 820 420" role="img"
-                        aria-label="Interactive network topology: fibre ONT to firewall to core switch, feeding a server, workstation, access point and NAS.">
+                        aria-label="Interactive diagram of the selected layer. Each cable can be disconnected to see what stops working.">
                     </svg>
                 </div>
                 <aside class="lab-panel">
                     <div class="lab-panel-head">
                         <span class="lab-dot"></span> Link status
                     </div>
+                    <p class="lab-scene-title" id="lab-scene-title"></p>
                     <ul id="lab-status" class="lab-status"></ul>
                     <p id="lab-note" class="lab-note"></p>
                     <button type="button" id="lab-reset" class="lab-reset">Re-seat all cables</button>
